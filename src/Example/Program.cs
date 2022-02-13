@@ -2,6 +2,7 @@ using Example;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using uBeac.Repositories.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,10 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+if (builder.Environment.IsEnvironment("Testing"))
+    builder.Services.AddMongo<MongoDBContext>("TestConnection", true);
+else
+    builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, CustomApplicationContext>();

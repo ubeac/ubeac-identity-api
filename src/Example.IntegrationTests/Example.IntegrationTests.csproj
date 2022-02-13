@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="uBeac.Core.Identity.Common">
+      <HintPath>..\..\local-packages\uBeac.Core.Identity.Common.dll</HintPath>
+    </Reference>
     <Reference Include="uBeac.Core.Web.Common">
       <HintPath>..\..\local-packages\uBeac.Core.Web.Common.dll</HintPath>
     </Reference>
