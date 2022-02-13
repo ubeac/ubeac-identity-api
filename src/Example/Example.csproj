@@ -25,6 +25,9 @@
 		<Reference Include="uBeac.Core.Services">
 			<HintPath>..\..\local-packages\uBeac.Core.Services.dll</HintPath>
 		</Reference>
+		<Reference Include="uBeac.Core.Repositories.Abstractions">
+			<HintPath>..\..\local-packages\uBeac.Core.Repositories.Abstractions.dll</HintPath>
+		</Reference>
 		<Reference Include="uBeac.Core.Repositories.MongoDB">
 			<HintPath>..\..\local-packages\uBeac.Core.Repositories.MongoDB.dll</HintPath>
 		</Reference>
@@ -42,6 +45,14 @@
 	<ItemGroup>
 		<Folder Include="ViewModels\" />
 		<Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AutoMapper" Version="11.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+	  <PackageReference Include="MongoDB.Bson" Version="2.14.1" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
 	</ItemGroup>
 
 </Project>

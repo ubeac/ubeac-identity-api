@@ -17,6 +17,9 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 // Adding mongodb
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
+// Adding application context
+builder.Services.AddScoped<IApplicationContext, CustomApplicationContext>();
+
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, CustomUser>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
@@ -49,4 +52,5 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCoreSwagger();
 app.Run();
