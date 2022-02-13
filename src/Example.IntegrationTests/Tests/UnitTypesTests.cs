@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using uBeac.Identity;
+using uBeac.Web;
 using Xunit;
 
 namespace Example.Tests;
@@ -91,7 +91,7 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new Unit
+        var content = new StringContent(JsonConvert.SerializeObject(new IdRequest
         {
             Id = _unitTypeId
         }), Encoding.UTF8, "application/json");
