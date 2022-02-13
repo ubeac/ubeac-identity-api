@@ -11,6 +11,9 @@ builder.Services.AddControllers();
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
+// Adding swagger
+builder.Services.AddCoreSwaggerWithJWT("Example");
+
 // Adding mongodb
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 

@@ -10,6 +10,12 @@
 		<Reference Include="uBeac.Core.Common">
 			<HintPath>..\..\local-packages\uBeac.Core.Common.dll</HintPath>
 		</Reference>
+		<Reference Include="uBeac.Core.Web.Common">
+			<HintPath>..\..\local-packages\uBeac.Core.Web.Common.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Web.Swagger">
+			<HintPath>..\..\local-packages\uBeac.Core.Web.Swagger.dll</HintPath>
+		</Reference>
 		<Reference Include="uBeac.Core.Configuration">
 			<HintPath>..\..\local-packages\uBeac.Core.Configuration.dll</HintPath>
 		</Reference>
@@ -34,6 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="ViewModels\" />
 		<Folder Include="Services\" />
 	</ItemGroup>
 
