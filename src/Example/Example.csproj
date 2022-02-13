@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="Example.IntegrationTests" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="uBeac.Core.Common">
 			<HintPath>..\..\local-packages\uBeac.Core.Common.dll</HintPath>
 		</Reference>

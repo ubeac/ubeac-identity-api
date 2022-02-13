@@ -54,3 +54,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCoreSwagger();
 app.Run();
+
+// For access test projects
+public partial class Program { }
