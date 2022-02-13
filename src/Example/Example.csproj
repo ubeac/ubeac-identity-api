@@ -13,8 +13,14 @@
 		<Reference Include="uBeac.Core.Configuration">
 			<HintPath>..\..\local-packages\uBeac.Core.Configuration.dll</HintPath>
 		</Reference>
+		<Reference Include="uBeac.Core.Services.Abstractions">
+			<HintPath>..\..\local-packages\uBeac.Core.Services.Abstractions.dll</HintPath>
+		</Reference>
 		<Reference Include="uBeac.Core.Services">
 			<HintPath>..\..\local-packages\uBeac.Core.Services.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Repositories.MongoDB">
+			<HintPath>..\..\local-packages\uBeac.Core.Repositories.MongoDB.dll</HintPath>
 		</Reference>
 		<Reference Include="uBeac.Core.Identity">
 			<HintPath>..\..\local-packages\uBeac.Core.Identity.dll</HintPath>
