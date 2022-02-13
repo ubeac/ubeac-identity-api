@@ -16,6 +16,12 @@
     <Reference Include="uBeac.Core.Identity">
       <HintPath>..\..\local-packages\uBeac.Core.Identity.dll</HintPath>
     </Reference>
+    <Reference Include="uBeac.Core.Identity.Common">
+      <HintPath>..\..\local-packages\uBeac.Core.Identity.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="uBeac.Core.Identity.MongoDB">
+      <HintPath>..\..\local-packages\uBeac.Core.Identity.MongoDB.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
