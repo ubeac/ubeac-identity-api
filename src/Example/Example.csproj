@@ -1,9 +1,63 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Example.IntegrationTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="uBeac.Core.Common">
+			<HintPath>..\..\local-packages\uBeac.Core.Common.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Web.Common">
+			<HintPath>..\..\local-packages\uBeac.Core.Web.Common.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Web.Swagger">
+			<HintPath>..\..\local-packages\uBeac.Core.Web.Swagger.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Configuration">
+			<HintPath>..\..\local-packages\uBeac.Core.Configuration.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Services.Abstractions">
+			<HintPath>..\..\local-packages\uBeac.Core.Services.Abstractions.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Services">
+			<HintPath>..\..\local-packages\uBeac.Core.Services.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Repositories.Abstractions">
+			<HintPath>..\..\local-packages\uBeac.Core.Repositories.Abstractions.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Repositories.MongoDB">
+			<HintPath>..\..\local-packages\uBeac.Core.Repositories.MongoDB.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Identity">
+			<HintPath>..\..\local-packages\uBeac.Core.Identity.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Identity.Common">
+			<HintPath>..\..\local-packages\uBeac.Core.Identity.Common.dll</HintPath>
+		</Reference>
+		<Reference Include="uBeac.Core.Identity.MongoDB">
+			<HintPath>..\..\local-packages\uBeac.Core.Identity.MongoDB.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="ViewModels\" />
+		<Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AutoMapper" Version="11.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+	  <PackageReference Include="MongoDB.Bson" Version="2.14.1" />
+	  <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
+	</ItemGroup>
 
 </Project>
