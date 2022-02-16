@@ -25,7 +25,7 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TKey>> Insert([FromBody] TUnit unit, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -67,7 +67,7 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnit>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {

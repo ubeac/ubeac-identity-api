@@ -26,7 +26,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TUserKey>> Insert([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TUserKey>> Create([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -86,7 +86,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiResult<UserViewModel<TUserKey>>> Find([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<UserViewModel<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -109,7 +109,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<UserViewModel<TUserKey>>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<UserViewModel<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {

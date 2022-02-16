@@ -25,7 +25,7 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -67,7 +67,7 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnitRole>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {

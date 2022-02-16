@@ -25,7 +25,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TRoleKey>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TRoleKey>> Create([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -67,7 +67,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TRole>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<TRole>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
