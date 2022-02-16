@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using uBeac.Identity;
 using Xunit;
 
-namespace Example.Tests;
+namespace API.Tests;
 
 public class AccountsTests : BaseTestClass, IClassFixture<Factory>
 {

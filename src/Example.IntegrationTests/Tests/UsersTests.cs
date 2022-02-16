@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace Example.Tests;
+namespace API.Tests;
 
 public class UsersTests : BaseTestClass, IClassFixture<Factory>
 {

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using uBeac.Web;
 using Xunit;
 
-namespace Example.Tests;
+namespace API.Tests;
 
 public class RolesTests : BaseTestClass, IClassFixture<Factory>
 {

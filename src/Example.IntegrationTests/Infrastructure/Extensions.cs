@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using uBeac.Web;
 
-namespace Example.Tests;
+namespace API.Tests;
 
 public static class Extensions
 {

@@ -5,7 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace Example.Tests;
+namespace API.Tests;
 
 [TestCaseOrderer("Example.Tests.PriorityOrderer", "Example.IntegrationTests")]
 public class PriorityOrderedTests
