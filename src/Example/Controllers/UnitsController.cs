@@ -6,6 +6,7 @@ using uBeac.Web;
 
 namespace Example;
 
+[Authorize(Roles = "ADMIN")]
 public class UnitsController : UnitsControllerBase<CustomUnit>
 {
     public UnitsController(IUnitService<CustomUnit> unitService) : base(unitService)
