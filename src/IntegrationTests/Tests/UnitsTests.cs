@@ -32,7 +32,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomUnit
+        var content = new StringContent(JsonConvert.SerializeObject(new AppUnit
         {
             Name = "Headquarter",
             Code = "1",
@@ -60,7 +60,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<CustomUnit>>();
+        var result = await response.GetApiResult<IEnumerable<AppUnit>>();
 
         // Assert
         Assert.NotNull(result.Data);

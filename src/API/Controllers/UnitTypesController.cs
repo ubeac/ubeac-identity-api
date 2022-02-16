@@ -6,9 +6,9 @@ using uBeac.Web;
 
 namespace API;
 
-public class UnitTypesController : UnitTypesControllerBase<CustomUnitType>
+public class UnitTypesController : UnitTypesControllerBase<AppUnitType>
 {
-    public UnitTypesController(IUnitTypeService<CustomUnitType> unitTypeService) : base(unitTypeService)
+    public UnitTypesController(IUnitTypeService<AppUnitType> unitTypeService) : base(unitTypeService)
     {
     }
 }

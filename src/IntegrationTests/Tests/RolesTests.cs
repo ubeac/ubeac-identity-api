@@ -31,7 +31,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomRole
+        var content = new StringContent(JsonConvert.SerializeObject(new AppRole
         {
             Name = "default"
         }), Encoding.UTF8, "application/json");
@@ -57,7 +57,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<CustomRole>>();
+        var result = await response.GetApiResult<IEnumerable<AppRole>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -69,7 +69,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomRole
+        var content = new StringContent(JsonConvert.SerializeObject(new AppRole
         {
             Id = _roleId,
             Name = "default"

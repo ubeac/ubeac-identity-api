@@ -1,7 +1,7 @@
 ﻿namespace API;
 
-// Inherits from UnitRole
-public class CustomUnitRole : UnitRole
+// Inherits from Unit
+public class AppUnit : Unit
 {
     // You can add your custom properties:
     // public string YourCustomProperty { get; set; }

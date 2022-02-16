@@ -31,7 +31,7 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomUnitType
+        var content = new StringContent(JsonConvert.SerializeObject(new AppUnitType
         {
             Code = "HQ",
             Name = "Headquarter"
@@ -58,7 +58,7 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<CustomUnitType>>();
+        var result = await response.GetApiResult<IEnumerable<AppUnitType>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -70,7 +70,7 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomUnitType
+        var content = new StringContent(JsonConvert.SerializeObject(new AppUnitType
         {
             Id = _unitTypeId,
             Code = "HQ",

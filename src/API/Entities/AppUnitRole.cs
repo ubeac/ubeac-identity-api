@@ -1,11 +1,8 @@
 ﻿namespace API;
 
-// Inherits from Role
-public class CustomRole : Role
+// Inherits from UnitRole
+public class AppUnitRole : UnitRole
 {
-    public CustomRole() { }
-    public CustomRole(string name) : base(name) { }
-
     // You can add your custom properties:
     // public string YourCustomProperty { get; set; }
 

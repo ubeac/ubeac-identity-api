@@ -6,9 +6,9 @@ using uBeac.Web;
 
 namespace API;
 
-public class RolesController : RolesControllerBase<CustomRole>
+public class RolesController : RolesControllerBase<AppRole>
 {
-    public RolesController(IRoleService<CustomRole> roleService) : base(roleService)
+    public RolesController(IRoleService<AppRole> roleService) : base(roleService)
     {
     }
 }

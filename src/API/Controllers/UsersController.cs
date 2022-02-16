@@ -7,9 +7,9 @@ using uBeac.Web;
 
 namespace API;
 
-public class UsersController : UsersControllerBase<CustomUser>
+public class UsersController : UsersControllerBase<AppUser>
 {
-    public UsersController(IUserService<CustomUser> userService) : base(userService)
+    public UsersController(IUserService<AppUser> userService) : base(userService)
     {
     }
 }

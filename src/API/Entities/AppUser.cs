@@ -1,10 +1,10 @@
 ﻿namespace API;
 
 // Inherits from User
-public class CustomUser : User
+public class AppUser : User
 {
-    public CustomUser() { }
-    public CustomUser(string userName) : base(userName) { }
+    public AppUser() { }
+    public AppUser(string userName) : base(userName) { }
 
     // You can add your custom properties:
     // public string YourCustomProperty { get; set; }

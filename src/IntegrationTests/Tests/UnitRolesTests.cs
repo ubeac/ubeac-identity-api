@@ -31,7 +31,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomUnitRole
+        var content = new StringContent(JsonConvert.SerializeObject(new AppUnitRole
         {
             UserName = "amir",
             Role = "admin"
@@ -58,7 +58,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<CustomUnitRole>>();
+        var result = await response.GetApiResult<IEnumerable<AppUnitRole>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -70,7 +70,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new CustomUnitRole
+        var content = new StringContent(JsonConvert.SerializeObject(new AppUnitRole
         {
             Id = _unitRoleId,
             UserName = "amir",

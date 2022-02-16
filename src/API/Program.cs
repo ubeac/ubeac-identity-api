@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using uBeac.Repositories.MongoDB;
+using uBeac.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -22,35 +23,35 @@ else
     builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding application context
-builder.Services.AddScoped<IApplicationContext, CustomApplicationContext>();
+builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
 
 // Adding repositories
-builder.Services.AddMongoDBUserRepository<MongoDBContext, CustomUser>();
+builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
-builder.Services.AddMongoDBRoleRepository<MongoDBContext, CustomRole>();
-builder.Services.AddMongoDBUnitRepository<MongoDBContext, CustomUnit>();
-builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, CustomUnitType>();
-builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, CustomUnitRole>();
+builder.Services.AddMongoDBRoleRepository<MongoDBContext, AppRole>();
+builder.Services.AddMongoDBUnitRepository<MongoDBContext, AppUnit>();
+builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, AppUnitType>();
+builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, AppUnitRole>();
 
 // Adding services
-builder.Services.AddUserService<CustomUserService, CustomUser>();
-builder.Services.AddRoleService<CustomRoleService, CustomRole>();
-builder.Services.AddUserRoleService<CustomUserRoleService, CustomUser>();
-builder.Services.AddUnitService<CustomUnitService, CustomUnit>();
-builder.Services.AddUnitTypeService<CustomUnitTypeService, CustomUnitType>();
-builder.Services.AddUnitRoleService<CustomUnitRoleService, CustomUnitRole>();
+builder.Services.AddUserService<UserService<AppUser>, AppUser>();
+builder.Services.AddRoleService<RoleService<AppRole>, AppRole>();
+builder.Services.AddUserRoleService<UserRoleService<AppUser>, AppUser>();
+builder.Services.AddUnitService<UnitService<AppUnit>, AppUnit>();
+builder.Services.AddUnitTypeService<UnitTypeService<AppUnitType>, AppUnitType>();
+builder.Services.AddUnitRoleService<UnitRoleService<AppUnitRole>, AppUnitRole>();
 
 // Adding identity core
 builder.Services
-    .AddIdentityUser<CustomUser>(configureOptions: options =>
+    .AddIdentityUser<AppUser>(configureOptions: options =>
     {
-        options.AdminUser = new CustomUser("admin");
+        options.AdminUser = new AppUser("admin");
         options.AdminPassword = "1qaz!QAZ";
         options.AdminRole = "ADMIN";
     })
-    .AddIdentityRole<CustomRole>()
-    .AddIdentityUnit<CustomUnit>()
-    .AddIdentityUnitType<CustomUnitType>();
+    .AddIdentityRole<AppRole>()
+    .AddIdentityUnit<AppUnit>()
+    .AddIdentityUnitType<AppUnitType>();
 
 // Adding jwt authentication
 builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
