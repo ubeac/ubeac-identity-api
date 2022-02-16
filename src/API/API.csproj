@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Example.IntegrationTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Authorization\" />
+		<Folder Include="ViewModels\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="uBeac.Common" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Web.Common" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Web.Swagger" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Configuration" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Services.Abstractions" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Services" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Identity" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Identity.Common" Version="0.3.1-alpha" />
+		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.3.1-alpha" />
+	</ItemGroup>
+
+</Project>
