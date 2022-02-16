@@ -18,10 +18,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-if (builder.Environment.IsEnvironment("Testing"))
-    builder.Services.AddMongo<MongoDBContext>("TestConnection");
-else
-    builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
