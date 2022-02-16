@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -49,9 +50,18 @@ builder.Services
         options.AdminPassword = "1qaz!QAZ";
         options.AdminRole = "ADMIN";
     })
-    .AddIdentityRole<AppRole>()
-    .AddIdentityUnit<AppUnit>()
-    .AddIdentityUnitType<AppUnitType>();
+    .AddIdentityRole<AppRole>(configureOptions: options =>
+    {
+        options.DefaultValues = new List<AppRole> { new("ADMIN") };
+    })
+    .AddIdentityUnit<AppUnit>(configureOptions: options =>
+    {
+        options.DefaultValues = new List<AppUnit>();
+    })
+    .AddIdentityUnitType<AppUnitType>(configureOptions: options =>
+    {
+        options.DefaultValues = new List<AppUnitType>();
+    });
 
 // Adding jwt authentication
 builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
