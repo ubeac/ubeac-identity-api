@@ -6,6 +6,7 @@ using uBeac.Web;
 
 namespace Example;
 
+[Authorize(Roles = "ADMIN")]
 public class RolesController : RolesControllerBase<CustomRole>
 {
     public RolesController(IRoleService<CustomRole> roleService) : base(roleService)

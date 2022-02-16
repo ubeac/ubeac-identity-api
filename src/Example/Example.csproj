@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Authorization\" />
 		<Folder Include="ViewModels\" />
 		<Folder Include="Services\" />
 	</ItemGroup>
