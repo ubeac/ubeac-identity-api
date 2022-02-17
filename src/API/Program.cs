@@ -65,6 +65,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptio
 
 var app = builder.Build();
 app.UseHttpsRedirection();
+app.UseMiddleware<AuthenticationMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
