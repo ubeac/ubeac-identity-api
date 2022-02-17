@@ -79,12 +79,12 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiResult<UserViewModel<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<UserResponse<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = await UserService.GetById(request.Id, cancellationToken);
-            var userVm = new UserViewModel<TUserKey>
+            var userVm = new UserResponse<TUserKey>
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -97,17 +97,17 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<UserViewModel<TUserKey>>();
+            return ex.ToApiResult<UserResponse<TUserKey>>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<UserViewModel<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<UserResponse<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var users = await UserService.GetAll(cancellationToken);
-            var usersVm = users.Select(u => new UserViewModel<TUserKey>
+            var usersVm = users.Select(u => new UserResponse<TUserKey>
             {
                 Id = u.Id,
                 UserName = u.UserName,
@@ -120,7 +120,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<UserViewModel<TUserKey>>();
+            return ex.ToApiListResult<UserResponse<TUserKey>>();
         }
     }
 }

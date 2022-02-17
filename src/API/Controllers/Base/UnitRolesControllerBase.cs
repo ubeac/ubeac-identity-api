@@ -22,7 +22,7 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     {
         try
         {
-            await UnitRoleService.Insert(unitRole, cancellationToken);
+            await UnitRoleService.Create(unitRole, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)

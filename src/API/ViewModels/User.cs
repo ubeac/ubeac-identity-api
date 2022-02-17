@@ -2,7 +2,7 @@
 
 namespace API;
 
-public class UserViewModel<TKey> where TKey : IEquatable<TKey>
+public class UserResponse<TKey> where TKey : IEquatable<TKey>
 {
     public virtual TKey Id { get; set; }
     public virtual string UserName { get; set; }
@@ -12,6 +12,6 @@ public class UserViewModel<TKey> where TKey : IEquatable<TKey>
     public virtual bool PhoneNumberConfirmed { get; set; }
 }
 
-public class UserViewModel : UserViewModel<Guid>
+public class UserResponse : UserResponse<Guid>
 {
 }
