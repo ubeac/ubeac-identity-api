@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using uBeac.Web;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);

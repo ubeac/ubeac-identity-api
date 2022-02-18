@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -12,10 +13,12 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     where TUser : User<TUserKey>
 {
     protected readonly IUserService<TUserKey, TUser> UserService;
+    protected readonly IMapper Mapper;
 
-    protected UsersControllerBase(IUserService<TUserKey, TUser> userService)
+    protected UsersControllerBase(IUserService<TUserKey, TUser> userService, IMapper mapper)
     {
         UserService = userService;
+        Mapper = mapper;
     }
 
     [HttpPost]
@@ -23,12 +26,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     {
         try
         {
-            var user = Activator.CreateInstance<TUser>();
-            user.UserName = request.UserName;
-            user.PhoneNumber = request.PhoneNumber;
-            user.PhoneNumberConfirmed = request.PhoneNumberConfirmed;
-            user.Email = request.Email;
-            user.EmailConfirmed = request.EmailConfirmed;
+            var user = Mapper.Map<TUser>(request);
             await UserService.Insert(user, request.Password, cancellationToken);
             return user.Id.ToApiResult();
         }
@@ -128,7 +126,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
 public abstract class UsersControllerBase<TUser> : UsersControllerBase<Guid, TUser>
     where TUser : User
 {
-    protected UsersControllerBase(IUserService<TUser> userService) : base(userService)
+    protected UsersControllerBase(IUserService<TUser> userService, IMapper mapper) : base(userService, mapper)
     {
     }
 }
