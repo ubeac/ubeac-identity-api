@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using uBeac.Web;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
@@ -18,10 +20,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-if (builder.Environment.IsEnvironment("Testing"))
-    builder.Services.AddMongo<MongoDBContext>("TestConnection");
-else
-    builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
@@ -68,6 +67,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptio
 
 var app = builder.Build();
 app.UseHttpsRedirection();
+app.UseMiddleware<AuthenticationMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();

@@ -65,7 +65,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<UserViewModel>>();
+        var result = await response.GetApiResult<IEnumerable<UserResponse>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -81,7 +81,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync($"{FindUri}?id={_userId}");
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<UserViewModel>();
+        var result = await response.GetApiResult<UserResponse>();
 
         // Assert
         Assert.NotNull(result.Data);
