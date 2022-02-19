@@ -13,10 +13,10 @@ namespace API.Tests;
 
 public class UnitsTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string InsertUri = "/API/Units/Insert";
+    private const string CreateUri = "/API/Units/Create";
     private const string UpdateUri = "/API/Units/Update";
     private const string DeleteUri = "/API/Units/Delete";
-    private const string AllUri = "/API/Units/All";
+    private const string GetAllUri = "/API/Units/GetAll";
 
     private static Guid _unitId;
 
@@ -28,7 +28,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Insert_ReturnsSuccessApiResult()
+    public async Task CreateCre_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -40,7 +40,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(InsertUri, content);
+        var response = await client.PostAsync(CreateUri, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -58,7 +58,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync(AllUri);
+        var response = await client.GetAsync(GetAllUri);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<AppUnit>>();
 

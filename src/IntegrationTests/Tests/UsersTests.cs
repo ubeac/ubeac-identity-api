@@ -11,11 +11,11 @@ namespace API.Tests;
 
 public class UsersTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string InsertUri = "/API/Users/Insert";
+    private const string CreateUri = "/API/Users/Create";
     private const string UpdateUri = "/API/Users/Update";
     private const string ChangePasswordUri = "/API/Users/ChangePassword";
-    private const string FindUri = "/API/Users/Find";
-    private const string AllUri = "/API/Users/All";
+    private const string GetByIdUri = "/API/Users/GetById";
+    private const string GetAllUri = "/API/Users/GetAll";
 
     private static Guid _userId;
     private static string _password;
@@ -28,7 +28,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Insert_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -44,7 +44,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(InsertUri, content);
+        var response = await client.PostAsync(CreateUri, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -57,13 +57,13 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task All_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync(AllUri);
+        var response = await client.GetAsync(GetAllUri);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<UserResponse>>();
 
@@ -73,13 +73,13 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(3)]
-    public async Task Find_ReturnsSuccessApiResult()
+    public async Task GetById_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync($"{FindUri}?id={_userId}");
+        var response = await client.GetAsync($"{GetByIdUri}?id={_userId}");
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<UserResponse>();
 
@@ -89,7 +89,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(4)]
-    public async Task Replace_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
