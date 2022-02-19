@@ -16,6 +16,10 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
+// Get options from configuration files
+var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
+var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
+
 // Adding swagger
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
@@ -24,6 +28,9 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
+
+// Adding email provider
+builder.Services.AddEmailProvider(emailOptions);
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
@@ -53,23 +60,18 @@ builder.Services
     {
         options.DefaultValues = new List<AppRole> { new("ADMIN") };
     })
-    .AddIdentityUnit<AppUnit>(configureOptions: options =>
-    {
-        options.DefaultValues = new List<AppUnit>();
-    })
-    .AddIdentityUnitType<AppUnitType>(configureOptions: options =>
-    {
-        options.DefaultValues = new List<AppUnitType>();
-    });
+    .AddIdentityUnit<AppUnit>()
+    .AddIdentityUnitType<AppUnitType>();
 
 // Adding jwt authentication
-builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
+builder.Services.AddJwtAuthentication(jwtOptions);
 
 var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseMiddleware<AuthenticationMiddleware>();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCoreSwagger();

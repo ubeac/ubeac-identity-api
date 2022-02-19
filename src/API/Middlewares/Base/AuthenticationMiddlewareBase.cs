@@ -14,21 +14,17 @@ public class AuthenticationMiddlewareBase<TKey, TUser>
     where TUser : User<TKey>
 {
     private readonly RequestDelegate _next;
-    private readonly IUserService<TKey, TUser> _userService;
-    private readonly IUserRoleService<TKey, TUser> _userRoleService;
 
-    public AuthenticationMiddlewareBase(RequestDelegate next, IUserService<TKey, TUser> userService, IUserRoleService<TKey, TUser> userRoleService)
+    public AuthenticationMiddlewareBase(RequestDelegate next)
     {
         _next = next;
-        _userService = userService;
-        _userRoleService = userRoleService;
     }
 
-    public async Task Invoke(HttpContext context)
+    public async Task Invoke(HttpContext context, IUserService<TKey, TUser> userService, IUserRoleService<TKey, TUser> userRoleService)
     {
         try
         {
-            var user = await GetUserAsync(context.Request);
+            var user = await GetUserAsync(context.Request, userService);
             if (user != null)
             {
                 var claims = new List<Claim>
@@ -37,7 +33,7 @@ public class AuthenticationMiddlewareBase<TKey, TUser>
                     new(ClaimTypes.Name, user.NormalizedUserName)
                 };
 
-                var userRoles = await _userRoleService.GetRolesForUser(user.Id);
+                var userRoles = await userRoleService.GetRolesForUser(user.Id);
                 var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
                 claims.AddRange(userRoleClaims);
 
@@ -56,7 +52,7 @@ public class AuthenticationMiddlewareBase<TKey, TUser>
         }
     }
 
-    private async Task<TUser> GetUserAsync(HttpRequest request)
+    private async Task<TUser> GetUserAsync(HttpRequest request, IUserService<TKey, TUser> userService)
     {
         try
         {
@@ -65,7 +61,7 @@ public class AuthenticationMiddlewareBase<TKey, TUser>
                 var accessToken = authHeader.ToString().Substring("Bearer".Length).Trim();
                 var principal = GetPrincipal(accessToken);
                 var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-                return await _userService.GetById((TKey)(object)userId);
+                return await userService.GetById((TKey)(object)userId);
             }
         }
         catch (Exception)
@@ -88,7 +84,7 @@ public class AuthenticationMiddlewareBase<TKey, TUser>
 
 public class AuthenticationMiddlewareBase<TUser> : AuthenticationMiddlewareBase<Guid, TUser> where TUser : User
 {
-    public AuthenticationMiddlewareBase(RequestDelegate next, IUserService<TUser> userService, IUserRoleService<TUser> userRoleService) : base(next, userService, userRoleService)
+    public AuthenticationMiddlewareBase(RequestDelegate next) : base(next)
     {
     }
 }
