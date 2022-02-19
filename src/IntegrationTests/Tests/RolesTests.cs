@@ -14,10 +14,10 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
 {
     private readonly Factory _factory;
 
-    private const string InsertUri = "API/Roles/Insert";
+    private const string CreateUri = "API/Roles/Create";
     private const string UpdateUri = "API/Roles/Update";
     private const string DeleteUri = "API/Roles/Delete";
-    private const string AllUri = "API/Roles/All";
+    private const string GetAllUri = "API/Roles/GetAll";
 
     private static Guid _roleId;
 
@@ -27,7 +27,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Insert_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -37,7 +37,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(InsertUri, content);
+        var response = await client.PostAsync(CreateUri, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -49,13 +49,13 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task All_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync(AllUri);
+        var response = await client.GetAsync(GetAllUri);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<AppRole>>();
 

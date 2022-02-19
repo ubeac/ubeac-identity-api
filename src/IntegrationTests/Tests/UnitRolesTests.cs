@@ -12,10 +12,10 @@ namespace API.Tests;
 
 public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string InsertUri = "/API/UnitTypes/Insert";
+    private const string CreateUri = "/API/UnitTypes/Create";
     private const string UpdateUri = "/API/UnitTypes/Update";
     private const string DeleteUri = "/API/UnitTypes/Delete";
-    private const string AllUri = "/API/UnitTypes/All";
+    private const string GetAllUri = "/API/UnitTypes/GetAll";
 
     private static Guid _unitRoleId;
 
@@ -27,7 +27,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Insert_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -38,7 +38,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(InsertUri, content);
+        var response = await client.PostAsync(CreateUri, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -50,13 +50,13 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task All_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync(AllUri);
+        var response = await client.GetAsync(GetAllUri);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<AppUnitRole>>();
 
@@ -66,7 +66,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(3)]
-    public async Task Replace_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
