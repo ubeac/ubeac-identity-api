@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using API;
 using Newtonsoft.Json;
 using uBeac.Web;
 using Xunit;
 
-namespace API.Tests;
+namespace IntegrationTests;
 
 public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
 {

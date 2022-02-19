@@ -2,11 +2,12 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using API;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using Xunit;
 
-namespace API.Tests;
+namespace IntegrationTests;
 
 public class AccountsTests : BaseTestClass, IClassFixture<Factory>
 {

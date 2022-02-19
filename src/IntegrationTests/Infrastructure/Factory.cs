@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace API.Tests;
+namespace IntegrationTests;
 
 public class Factory : WebApplicationFactory<Program>
 {

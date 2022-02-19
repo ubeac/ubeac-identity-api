@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using API;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using uBeac.Web;
 using Xunit;
 
-namespace API.Tests;
+namespace IntegrationTests;
 
 public class UnitsTests : BaseTestClass, IClassFixture<Factory>
 {
@@ -28,7 +29,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task CreateCre_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -52,7 +53,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task All_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
