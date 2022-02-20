@@ -16,7 +16,11 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     private const string RegisterUri = "/API/Accounts/Register";
     private const string LoginUri = "/API/Accounts/Login";
     private const string RefreshTokenUri = "/API/Accounts/RefreshToken";
+    private const string ForgotPasswordUri = "/API/Accounts/ForgotPassword";
+    private const string ResetPasswordUri = "/API/Accounts/ResetPassword";
 
+    private static string _userName = "amir";
+    private static string _email = "ap@ubeac.io";
     private static Guid _userId;
     private static string _accessToken;
     private static string _refreshToken;
@@ -33,8 +37,8 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new RegisterRequest
         {
-            UserName = "amir",
-            Email = "ap@ubeac.com",
+            UserName = _userName,
+            Email = _email,
             Password = "1qaz!QAZ"
         }), Encoding.UTF8, "application/json");
 
@@ -91,9 +95,34 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<TokenResult>();
 
+        // Assert
+        Assert.NotNull(result.Data);
+        Assert.NotEqual(default, result.Data.UserId);
+        Assert.NotEmpty(result.Data.Token);
+        Assert.NotEmpty(result.Data.RefreshToken);
+
         // Set Static Values
         _userId = result.Data.UserId;
         _accessToken = result.Data.Token;
         _refreshToken = result.Data.RefreshToken;
+    }
+
+    [Fact, TestPriority(4)]
+    public async Task ForgotPassword_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var content = new StringContent(JsonConvert.SerializeObject(new ForgotPasswordRequest
+        {
+            UserName = _userName
+        }), Encoding.UTF8, "application/json");
+    
+        // Act
+        var response = await client.PostAsync(ForgotPasswordUri, content);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+    
+        // Assert
+        Assert.True(result.Data);
     }
 }

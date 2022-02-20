@@ -59,6 +59,34 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest model, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await UserService.ForgotPassword(model.UserName, cancellationToken);
+            return true.ToApiResult();
+
+        }
+        catch (Exception)
+        {
+            return false.ToApiResult();
+        }
+    }
+
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> ResetPassword([FromBody] ResetPasswordRequest model, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await UserService.ResetPassword(model.UserName, model.Token, model.NewPassword, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception)
+        {
+            return false.ToApiResult();
+        }
+    }
 }
 
 public abstract class AccountsControllerBase<TUser> : AccountsControllerBase<Guid, TUser>

@@ -5,6 +5,12 @@ namespace API;
 public class ResetPasswordRequest
 {
     [Required]
-    [EmailAddress]
-    public string Email { get; set; }
+    public string UserName { get; set; }
+
+    [Required] 
+    public string Token { get; set; }
+
+    [Required] 
+    [DataType(DataType.Password)]
+    public string NewPassword { get; set; }
 }
