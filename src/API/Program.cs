@@ -71,7 +71,7 @@ builder.Services
 
         options.DefaultValues = new List<AppUnit> { firstUnit, secondUnit };
     })
-    .AddIdentityUnitType<UnitType>(configureOptions: options =>
+    .AddIdentityUnitType<AppUnitType>(configureOptions: options =>
     {
         options.DefaultValues = new List<AppUnitType>
         {
