@@ -1,4 +1,4 @@
-﻿namespace API.Tests;
+﻿namespace IntegrationTests;
 
 public class BaseTestClass : PriorityOrderedTests
 {

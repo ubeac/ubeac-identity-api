@@ -48,6 +48,9 @@ builder.Services.AddUnitService<UnitService<AppUnit>, AppUnit>();
 builder.Services.AddUnitTypeService<UnitTypeService<AppUnitType>, AppUnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<AppUnitRole>, AppUnitRole>();
 
+// Adding jwt authentication
+builder.Services.AddJwtAuthentication(jwtOptions);
+
 // Adding identity core
 builder.Services
     .AddIdentityUser<AppUser>(configureOptions: options =>
@@ -62,9 +65,6 @@ builder.Services
     })
     .AddIdentityUnit<AppUnit>()
     .AddIdentityUnitType<AppUnitType>();
-
-// Adding jwt authentication
-builder.Services.AddJwtAuthentication(jwtOptions);
 
 var app = builder.Build();
 app.UseHttpsRedirection();
