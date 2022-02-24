@@ -6,6 +6,11 @@ using uBeac.Web;
 
 namespace API;
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to roles management.
+/// </summary>
+/// <typeparam name="TRoleKey">Type of role entity key -- TKey must have inherited from IEquatable</typeparam>
+/// <typeparam name="TRole">Type of role entity -- TRole must have inherited from Role</typeparam>
 public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
    where TRoleKey : IEquatable<TRoleKey>
    where TRole : Role<TRoleKey>
@@ -17,6 +22,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
         RoleService = roleService;
     }
 
+    /// <summary>
+    /// Creates a new role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<TRoleKey>> Create([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
@@ -31,6 +40,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Updates a role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Update([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
@@ -45,6 +58,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Deletes a role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
@@ -59,6 +76,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Get all roles
+    /// </summary>
+    /// <returns>Returns all roles</returns>
     [HttpGet]
     public virtual async Task<IApiListResult<TRole>> GetAll(CancellationToken cancellationToken = default)
     {
@@ -74,6 +95,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 }
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to roles management.
+/// </summary>
+/// <typeparam name="TRole">Type of role entity -- TRole must have inherited from Role</typeparam>
 public abstract class RolesControllerBase<TRole> : RolesControllerBase<Guid, TRole>
    where TRole : Role
 {

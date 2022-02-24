@@ -6,6 +6,11 @@ using uBeac.Web;
 
 namespace API;
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to accounts management.
+/// </summary>
+/// <typeparam name="TUserKey">Type of user entity key -- TKey must have inherited from IEquatable</typeparam>
+/// <typeparam name="TUser">Type of user entity -- TUser must have inherited from User</typeparam>
 public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
    where TUserKey : IEquatable<TUserKey>
    where TUser : User<TUserKey>
@@ -17,6 +22,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         UserService = userService;
     }
 
+    /// <summary>
+    /// Registers a new user
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
     {
@@ -31,6 +40,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Generates user credential (like access token, refresh token, etc.)
+    /// </summary>
+    /// <returns>Returns user credential (like access token, refresh token, etc.)</returns>
     [HttpPost]
     public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
     {
@@ -45,6 +58,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Refreshes user credential (like access token, refresh token, etc.)
+    /// </summary>
+    /// <returns>Returns refreshed user credential (like access token, refresh token, etc.)</returns>
     [HttpPost]
     public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
     {
@@ -59,6 +76,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Sends a forgot password email to user
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest model, CancellationToken cancellationToken = default)
     {
@@ -74,6 +95,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Resets user password by token and new password
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> ResetPassword([FromBody] ResetPasswordRequest model, CancellationToken cancellationToken = default)
     {
@@ -89,6 +114,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 }
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to accounts management.
+/// </summary>
+/// <typeparam name="TUser">Type of user entity -- TUser must have inherited from User</typeparam>
 public abstract class AccountsControllerBase<TUser> : AccountsControllerBase<Guid, TUser>
     where TUser : User
 {

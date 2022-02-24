@@ -8,6 +8,11 @@ using uBeac.Web;
 
 namespace API;
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to users management.
+/// </summary>
+/// <typeparam name="TUserKey">Type of user entity key -- TKey must have inherited from IEquatable</typeparam>
+/// <typeparam name="TUser">Type of user entity -- TUnit must have inherited from Unit</typeparam>
 public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     where TUserKey : IEquatable<TUserKey>
     where TUser : User<TUserKey>
@@ -21,6 +26,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         Mapper = mapper;
     }
 
+    /// <summary>
+    /// Creates a new user
+    /// </summary>
+    /// <returns>Returns id of created user</returns>
     [HttpPost]
     public virtual async Task<IApiResult<TUserKey>> Create([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
     {
@@ -36,8 +45,12 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Updates a user
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] ReplaceUserRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Update([FromBody] UpdateUserRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -57,6 +70,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Changes user password
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangePasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
@@ -76,6 +93,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Get user info by id
+    /// </summary>
+    /// <returns>Returns user info</returns>
     [HttpGet]
     public virtual async Task<IApiResult<UserResponse<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
@@ -99,6 +120,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
+    /// <summary>
+    /// Get all users
+    /// </summary>
+    /// <returns>Returns all units</returns>
     [HttpGet]
     public virtual async Task<IApiListResult<UserResponse<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
     {
@@ -123,6 +148,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 }
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to users management.
+/// </summary>
+/// <typeparam name="TUser">Type of user entity -- TUnit must have inherited from Unit</typeparam>
 public abstract class UsersControllerBase<TUser> : UsersControllerBase<Guid, TUser>
     where TUser : User
 {
