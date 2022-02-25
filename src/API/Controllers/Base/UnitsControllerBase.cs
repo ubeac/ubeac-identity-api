@@ -6,6 +6,11 @@ using uBeac.Web;
 
 namespace API;
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to units management.
+/// </summary>
+/// <typeparam name="TKey">Type of unit entity key -- TKey must have inherited from IEquatable</typeparam>
+/// <typeparam name="TUnit">Type of unit entity -- TUnit must have inherited from Unit</typeparam>
 public abstract class UnitsController<TKey, TUnit> : BaseController
     where TKey : IEquatable<TKey>
     where TUnit : Unit<TKey>
@@ -17,6 +22,10 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
         UnitService = unitService;
     }
 
+    /// <summary>
+    /// Creates a new unit
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
@@ -31,6 +40,10 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
         }
     }
 
+    /// <summary>
+    /// Updates a role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Update([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
@@ -45,6 +58,10 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
         }
     }
 
+    /// <summary>
+    /// Deletes a role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
@@ -59,6 +76,10 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
         }
     }
 
+    /// <summary>
+    /// Get all units
+    /// </summary>
+    /// <returns>Returns all units</returns>
     [HttpGet]
     public virtual async Task<IApiListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
     {
@@ -74,6 +95,10 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     }
 }
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to units management.
+/// </summary>
+/// <typeparam name="TUnit">Type of unit entity -- TUnit must have inherited from Unit</typeparam>
 public abstract class UnitsControllerBase<TUnit> : UnitsController<Guid, TUnit>
     where TUnit : Unit
 {

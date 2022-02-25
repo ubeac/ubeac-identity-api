@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API;
 
-public class ReplaceUserRequest<TKey> where TKey : IEquatable<TKey>
+public class UpdateUserRequest<TKey> where TKey : IEquatable<TKey>
 {
     [Required]
     public virtual TKey Id { get; set; }
@@ -18,6 +18,6 @@ public class ReplaceUserRequest<TKey> where TKey : IEquatable<TKey>
     public virtual DateTimeOffset? LockoutEnd { get; set; }
 }
 
-public class ReplaceUserRequest : ReplaceUserRequest<Guid>
+public class UpdateUserRequest : UpdateUserRequest<Guid>
 {
 }

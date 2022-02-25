@@ -6,6 +6,11 @@ using uBeac.Web;
 
 namespace API;
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to unit roles management.
+/// </summary>
+/// <typeparam name="TKey">Type of unit role entity key -- TKey must have inherited from IEquatable</typeparam>
+/// <typeparam name="TUnitRole">Type of unit role entity -- TUnitRole must have inherited from UnitRole</typeparam>
 public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     where TKey : IEquatable<TKey>
     where TUnitRole : UnitRole<TKey>
@@ -17,6 +22,10 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
         UnitRoleService = unitRoleService;
     }
 
+    /// <summary>
+    /// Creates a new unit role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
@@ -31,6 +40,10 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Updates a unit role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
@@ -45,6 +58,10 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Deletes a unit role
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
@@ -59,6 +76,10 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
         }
     }
 
+    /// <summary>
+    /// Get all unit roles
+    /// </summary>
+    /// <returns>Returns all unit roles</returns>
     [HttpGet]
     public virtual async Task<IApiListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
     {
@@ -74,6 +95,10 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 }
 
+/// <summary>
+/// This class is an abstract controller (base controller) that has base action methods (endpoints) to unit roles management.
+/// </summary>
+/// <typeparam name="TUnitRole">Type of unit role entity -- TUnitRole must have inherited from UnitRole</typeparam>
 public abstract class UnitRolesControllerBase<TUnitRole> : UnitRolesControllerBase<Guid, TUnitRole>
     where TUnitRole : UnitRole
 {
