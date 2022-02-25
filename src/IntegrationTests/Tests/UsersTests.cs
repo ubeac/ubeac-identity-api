@@ -14,6 +14,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
 {
     private const string CreateUri = "/API/Users/Create";
     private const string UpdateUri = "/API/Users/Update";
+    private const string AssignRolesUri = "/API/Users/AssignRoles";
     private const string ChangePasswordUri = "/API/Users/ChangePassword";
     private const string GetByIdUri = "/API/Users/GetById";
     private const string GetAllUri = "/API/Users/GetAll";
@@ -94,7 +95,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceUserRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new UpdateUserRequest
         {
             Id = _userId,
             PhoneNumber = "+98",
@@ -107,6 +108,26 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
 
         // Act
         var response = await client.PostAsync(UpdateUri, content);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+
+        // Assert
+        Assert.True(result.Data);
+    }
+
+    [Fact, TestPriority(5)]
+    public async Task AssignRoles_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var content = new StringContent(JsonConvert.SerializeObject(new AssignRoleRequest
+        {
+            Id = _userId,
+            Roles = new List<string> { "admin" }
+        }), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await client.PostAsync(AssignRolesUri, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 

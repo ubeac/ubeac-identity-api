@@ -18,11 +18,13 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     where TUser : User<TUserKey>
 {
     protected readonly IUserService<TUserKey, TUser> UserService;
+    protected readonly IUserRoleService<TUserKey, TUser> UserRoleService;
     protected readonly IMapper Mapper;
 
-    protected UsersControllerBase(IUserService<TUserKey, TUser> userService, IMapper mapper)
+    protected UsersControllerBase(IUserService<TUserKey, TUser> userService, IUserRoleService<TUserKey, TUser> userRoleService, IMapper mapper)
     {
         UserService = userService;
+        UserRoleService = userRoleService;
         Mapper = mapper;
     }
 
@@ -62,6 +64,30 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             user.LockoutEnabled = request.LockoutEnabled;
             user.LockoutEnd = request.LockoutEnd;
             await UserService.Replace(user, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<bool>();
+        }
+    }
+
+    /// <summary>
+    /// Assigns roles to user (Remove current roles and Add new roles)
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> AssignRoles([FromBody] AssignRoleRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            // Remove current roles
+            var currentRoles = await UserRoleService.GetRolesForUser(request.Id, cancellationToken);
+            await UserRoleService.RemoveRoles(request.Id, currentRoles, cancellationToken);
+
+            // Add new roles
+            if (request.Roles?.Any() is true) await UserRoleService.AddRoles(request.Id, request.Roles, cancellationToken);
+
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -155,7 +181,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
 public abstract class UsersControllerBase<TUser> : UsersControllerBase<Guid, TUser>
     where TUser : User
 {
-    protected UsersControllerBase(IUserService<TUser> userService, IMapper mapper) : base(userService, mapper)
+    protected UsersControllerBase(IUserService<TUser> userService, IUserRoleService<TUser> userRoleService, IMapper mapper) : base(userService, userRoleService, mapper)
     {
     }
 }
