@@ -98,7 +98,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new UpdateUserRequest
         {
             Id = _userId,
-            PhoneNumber = "+98",
+            PhoneNumber = "+9810",
             PhoneNumberConfirmed = true,
             Email = "john@doe.com",
             EmailConfirmed = true,

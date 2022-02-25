@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Omu.ValueInjecter;
 using uBeac.Web;
 
 namespace API;
@@ -57,12 +59,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         try
         {
             var user = await UserService.GetById(request.Id, cancellationToken);
-            user.PhoneNumber = request.PhoneNumber;
-            user.PhoneNumberConfirmed = request.PhoneNumberConfirmed;
-            user.Email = request.Email;
-            user.EmailConfirmed = request.EmailConfirmed;
-            user.LockoutEnabled = request.LockoutEnabled;
-            user.LockoutEnd = request.LockoutEnd;
+            user.InjectFrom(request);
             await UserService.Replace(user, cancellationToken);
             return true.ToApiResult();
         }
@@ -105,12 +102,8 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     {
         try
         {
-            await UserService.ChangePassword(new ChangePassword<TUserKey>
-            {
-                UserId = request.UserId,
-                CurrentPassword = request.CurrentPassword,
-                NewPassword = request.NewPassword
-            }, cancellationToken);
+            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
+            await UserService.ChangePassword(changePassword, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -129,15 +122,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         try
         {
             var user = await UserService.GetById(request.Id, cancellationToken);
-            var userVm = new UserResponse<TUserKey>
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                EmailConfirmed = user.EmailConfirmed,
-                PhoneNumber = user.PhoneNumber,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed
-            };
+            var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
             return userVm.ToApiResult();
         }
         catch (Exception ex)
@@ -156,15 +141,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         try
         {
             var users = await UserService.GetAll(cancellationToken);
-            var usersVm = users.Select(u => new UserResponse<TUserKey>
-            {
-                Id = u.Id,
-                UserName = u.UserName,
-                Email = u.Email,
-                EmailConfirmed = u.EmailConfirmed,
-                PhoneNumber = u.PhoneNumber,
-                PhoneNumberConfirmed = u.PhoneNumberConfirmed
-            });
+            var usersVm = Mapper.Map<IEnumerable<UserResponse<TUserKey>>>(users);
             return usersVm.ToApiListResult();
         }
         catch (Exception ex)

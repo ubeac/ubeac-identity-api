@@ -26,6 +26,7 @@
 		<PackageReference Include="uBeac.Identity" Version="0.6.3-alpha" />
 		<PackageReference Include="uBeac.Identity.Common" Version="0.6.3-alpha" />
 		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.6.3-alpha" />
+		<PackageReference Include="ValueInjecter" Version="3.2.0" />
 	</ItemGroup>
 
 </Project>
