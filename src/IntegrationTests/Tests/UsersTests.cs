@@ -135,13 +135,13 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         Assert.True(result.Data);
     }
 
-    [Fact, TestPriority(5)]
+    [Fact, TestPriority(6)]
     public async Task ChangePassword_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
         var newPassword = "1QAZ!qaz";
-        var content = new StringContent(JsonConvert.SerializeObject(new ChangePasswordRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new ChangeUserPasswordRequest
         {
             UserId = _userId,
             CurrentPassword = _password,

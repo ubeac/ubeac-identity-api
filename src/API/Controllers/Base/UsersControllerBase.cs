@@ -98,7 +98,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangePasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangeUserPasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {

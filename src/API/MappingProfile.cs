@@ -9,8 +9,11 @@ public class MappingProfile : Profile
     {
         CreateMap<InsertUserRequest, AppUser>();
 
-        CreateMap<ChangePasswordRequest, ChangePassword>();
-        CreateMap<ChangePasswordRequest<Guid>, ChangePassword<Guid>>();
+        CreateMap<ChangeUserPasswordRequest, ChangePassword>();
+        CreateMap<ChangeUserPasswordRequest<Guid>, ChangePassword<Guid>>();
+
+        CreateMap<ChangeAccountPasswordRequest, ChangePassword>();
+        CreateMap<ChangeAccountPasswordRequest, ChangePassword<Guid>>();
 
         CreateMap<AppUser, UserResponse>();
         CreateMap<AppUser, UserResponse<Guid>>();

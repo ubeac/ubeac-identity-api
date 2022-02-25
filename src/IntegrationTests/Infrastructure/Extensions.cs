@@ -11,4 +11,9 @@ public static class Extensions
     {
         return JsonConvert.DeserializeObject<ApiResult<TResult>>(await response.Content.ReadAsStringAsync());
     }
+
+    public static void SetAccessToken(this HttpClient client, string accessToken)
+    {
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+    }
 }

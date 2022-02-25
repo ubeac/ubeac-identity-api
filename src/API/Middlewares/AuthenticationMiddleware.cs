@@ -57,7 +57,7 @@ public class AuthenticationMiddleware
             {
                 var accessToken = authHeader.ToString().Substring("Bearer".Length).Trim();
                 var principal = GetPrincipal(accessToken);
-                var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
                 return await userService.GetById((Guid)(object)userId);
             }
         }
