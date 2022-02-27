@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using uBeac.Web;
 using Xunit;
@@ -20,6 +21,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     private const string DeleteUri = "API/Roles/Delete";
     private const string GetAllUri = "API/Roles/GetAll";
 
+    private static string _roleName = new Faker().Lorem.Word();
     private static Guid _roleId;
 
     public RolesTests(Factory factory)
@@ -34,7 +36,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppRole
         {
-            Name = "default"
+            Name = _roleName
         }), Encoding.UTF8, "application/json");
 
         // Act
@@ -73,7 +75,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new AppRole
         {
             Id = _roleId,
-            Name = "default"
+            Name = _roleName
         }), Encoding.UTF8, "application/json");
 
         // Act

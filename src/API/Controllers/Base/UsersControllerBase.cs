@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Omu.ValueInjecter;
 using uBeac.Web;
@@ -15,6 +16,7 @@ namespace API;
 /// </summary>
 /// <typeparam name="TUserKey">Type of user entity key -- TKey must have inherited from IEquatable</typeparam>
 /// <typeparam name="TUser">Type of user entity -- TUnit must have inherited from Unit</typeparam>
+[Authorize(Roles = "ADMIN")]
 public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     where TUserKey : IEquatable<TUserKey>
     where TUser : User<TUserKey>

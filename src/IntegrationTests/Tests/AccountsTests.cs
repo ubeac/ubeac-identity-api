@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using Xunit;
@@ -20,8 +21,8 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     private const string ResetPasswordUri = "/API/Accounts/ResetPassword";
     private const string ChangePasswordUri = "/API/Accounts/ChangePassword";
 
-    private static string _userName = "amir";
-    private static string _email = "ap@ubeac.io";
+    private static string _userName = new Faker().Person.UserName;
+    private static string _email = new Faker().Person.Email;
     private static string _password = "1qaz!QAZ";
     private static Guid _userId;
     private static string _accessToken;

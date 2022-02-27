@@ -121,7 +121,8 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// Changes account password
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
-    [HttpPost, Authorize]
+    [HttpPost]
+    [Authorize]
     public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangeAccountPasswordRequest request, CancellationToken cancellationToken = default)
     {
         try

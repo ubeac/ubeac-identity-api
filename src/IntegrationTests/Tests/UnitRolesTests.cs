@@ -13,10 +13,10 @@ namespace IntegrationTests;
 
 public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string CreateUri = "/API/UnitTypes/Create";
-    private const string UpdateUri = "/API/UnitTypes/Update";
-    private const string DeleteUri = "/API/UnitTypes/Delete";
-    private const string GetAllUri = "/API/UnitTypes/GetAll";
+    private const string CreateUri = "/API/UnitRoles/Create";
+    private const string UpdateUri = "/API/UnitRoles/Update";
+    private const string DeleteUri = "/API/UnitRoles/Delete";
+    private const string GetAllUri = "/API/UnitRoles/GetAll";
 
     private static Guid _unitRoleId;
 

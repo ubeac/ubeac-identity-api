@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using uBeac.Web;
 using Xunit;
@@ -18,6 +19,7 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
     private const string DeleteUri = "/API/UnitTypes/Delete";
     private const string GetAllUri = "/API/UnitTypes/GetAll";
 
+    private static string _unitCode = new Faker().Random.String();
     private static Guid _unitTypeId;
 
     private readonly Factory _factory;
@@ -34,8 +36,8 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnitType
         {
-            Code = "HQ",
-            Name = "Headquarter"
+            Code = _unitCode,
+            Name = new Faker().Lorem.Word(),
         }), Encoding.UTF8, "application/json");
 
         // Act
@@ -74,8 +76,8 @@ public class UnitTypesTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnitType
         {
             Id = _unitTypeId,
-            Code = "HQ",
-            Name = "Headquarter"
+            Code = _unitCode,
+            Name = new Faker().Lorem.Word(),
         }), Encoding.UTF8, "application/json");
 
         // Act

@@ -25,18 +25,18 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// <summary>
     /// Creates a new unit role
     /// </summary>
-    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
+    /// <returns>Returns id of created unit role</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Create(unitRole, cancellationToken);
-            return true.ToApiResult();
+            return unitRole.Id.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToApiResult<TKey>();
         }
     }
 

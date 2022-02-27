@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using uBeac.Web;
@@ -18,6 +19,9 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     private const string UpdateUri = "/API/Units/Update";
     private const string DeleteUri = "/API/Units/Delete";
     private const string GetAllUri = "/API/Units/GetAll";
+
+    private static string _unitCode = new Faker().Random.String();
+    private static string _unitType = new Faker().Random.String();
 
     private static Guid _unitId;
 
@@ -35,9 +39,9 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnit
         {
-            Name = "Headquarter",
-            Code = "1",
-            Type = "HQ"
+            Name = new Faker().Lorem.Word(),
+            Code = _unitCode,
+            Type = _unitType
         }), Encoding.UTF8, "application/json");
 
         // Act
@@ -69,16 +73,16 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(3)]
-    public async Task Replace_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new Unit
         {
             Id = _unitId,
-            Name = "Headquarter",
-            Code = "1",
-            Type = "HQ"
+            Name = new Faker().Lorem.Word(),
+            Code = _unitCode,
+            Type = _unitType
         }), Encoding.UTF8, "application/json");
 
         // Act
