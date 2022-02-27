@@ -35,7 +35,7 @@ public class AuthenticationMiddleware
                 var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
                 claims.AddRange(userRoleClaims);
 
-                var identity = new ClaimsIdentity(claims);
+                var identity = new ClaimsIdentity(claims, "Basic");
                 context.User = new ClaimsPrincipal(identity);
             }
         }
@@ -58,7 +58,7 @@ public class AuthenticationMiddleware
                 var accessToken = authHeader.ToString().Substring("Bearer".Length).Trim();
                 var principal = GetPrincipal(accessToken);
                 var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
-                return await userService.GetById((Guid)(object)userId);
+                return await userService.GetById(Guid.Parse(userId));
             }
         }
         catch (Exception)
