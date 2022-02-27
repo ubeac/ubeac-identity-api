@@ -14,13 +14,6 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
 {
     private readonly Factory _factory;
 
-    private const string RegisterUri = "/API/Accounts/Register";
-    private const string LoginUri = "/API/Accounts/Login";
-    private const string RefreshTokenUri = "/API/Accounts/RefreshToken";
-    private const string ForgotPasswordUri = "/API/Accounts/ForgotPassword";
-    private const string ResetPasswordUri = "/API/Accounts/ResetPassword";
-    private const string ChangePasswordUri = "/API/Accounts/ChangePassword";
-
     private static string _userName = new Faker().Person.UserName;
     private static string _email = new Faker().Person.Email;
     private static string _password = "1qaz!QAZ";
@@ -46,7 +39,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(RegisterUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_REGISTER, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -66,7 +59,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(LoginUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_LOGIN, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<TokenResult>();
 
@@ -94,7 +87,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(RefreshTokenUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_REFRESH_TOKEN, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<TokenResult>();
 
@@ -121,7 +114,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
     
         // Act
-        var response = await client.PostAsync(ForgotPasswordUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_FORGOT_PASSWORD, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
     
@@ -143,7 +136,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(ChangePasswordUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_CHANGE_PASSWORD, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 

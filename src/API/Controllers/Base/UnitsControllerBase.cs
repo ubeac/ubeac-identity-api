@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -11,6 +12,7 @@ namespace API;
 /// </summary>
 /// <typeparam name="TKey">Type of unit entity key -- TKey must have inherited from IEquatable</typeparam>
 /// <typeparam name="TUnit">Type of unit entity -- TUnit must have inherited from Unit</typeparam>
+[Authorize(Roles = "ADMIN")]
 public abstract class UnitsController<TKey, TUnit> : BaseController
     where TKey : IEquatable<TKey>
     where TUnit : Unit<TKey>

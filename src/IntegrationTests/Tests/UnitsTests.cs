@@ -15,11 +15,6 @@ namespace IntegrationTests;
 
 public class UnitsTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string CreateUri = "/API/Units/Create";
-    private const string UpdateUri = "/API/Units/Update";
-    private const string DeleteUri = "/API/Units/Delete";
-    private const string GetAllUri = "/API/Units/GetAll";
-
     private static string _unitCode = new Faker().Random.String();
     private static string _unitType = new Faker().Random.String();
 
@@ -36,7 +31,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnit
         {
             Name = new Faker().Lorem.Word(),
@@ -45,7 +40,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(CreateUri, content);
+        var response = await client.PostAsync(Endpoints.UNITS_CREATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -60,10 +55,10 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
 
         // Act
-        var response = await client.GetAsync(GetAllUri);
+        var response = await client.GetAsync(Endpoints.UNITS_GET_ALL);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<AppUnit>>();
 
@@ -76,7 +71,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new Unit
         {
             Id = _unitId,
@@ -86,7 +81,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(UpdateUri, content);
+        var response = await client.PostAsync(Endpoints.UNITS_UPDATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -98,14 +93,14 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     public async Task Delete_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new IdRequest
         {
             Id = _unitId
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(DeleteUri, content);
+        var response = await client.PostAsync(Endpoints.UNITS_DELETE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 

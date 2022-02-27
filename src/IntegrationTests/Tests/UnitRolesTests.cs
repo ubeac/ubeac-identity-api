@@ -13,11 +13,6 @@ namespace IntegrationTests;
 
 public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string CreateUri = "/API/UnitRoles/Create";
-    private const string UpdateUri = "/API/UnitRoles/Update";
-    private const string DeleteUri = "/API/UnitRoles/Delete";
-    private const string GetAllUri = "/API/UnitRoles/GetAll";
-
     private static Guid _unitRoleId;
 
     private readonly Factory _factory;
@@ -31,7 +26,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnitRole
         {
             UserName = "amir",
@@ -39,7 +34,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(CreateUri, content);
+        var response = await client.PostAsync(Endpoints.UNIT_ROLES_CREATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -54,10 +49,10 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
 
         // Act
-        var response = await client.GetAsync(GetAllUri);
+        var response = await client.GetAsync(Endpoints.UNIT_ROLES_GET_ALL);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<AppUnitRole>>();
 
@@ -70,7 +65,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AppUnitRole
         {
             Id = _unitRoleId,
@@ -79,7 +74,7 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(UpdateUri, content);
+        var response = await client.PostAsync(Endpoints.UNIT_ROLES_UPDATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -91,14 +86,14 @@ public class UnitRolesTests : BaseTestClass, IClassFixture<Factory>
     public async Task Delete_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new IdRequest
         {
             Id = _unitRoleId
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(DeleteUri, content);
+        var response = await client.PostAsync(Endpoints.UNIT_ROLES_DELETE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
