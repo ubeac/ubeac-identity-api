@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using Xunit;
@@ -13,14 +14,9 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
 {
     private readonly Factory _factory;
 
-    private const string RegisterUri = "/API/Accounts/Register";
-    private const string LoginUri = "/API/Accounts/Login";
-    private const string RefreshTokenUri = "/API/Accounts/RefreshToken";
-    private const string ForgotPasswordUri = "/API/Accounts/ForgotPassword";
-    private const string ResetPasswordUri = "/API/Accounts/ResetPassword";
-
-    private static string _userName = "amir";
-    private static string _email = "ap@ubeac.io";
+    private static string _userName = new Faker().Person.UserName;
+    private static string _email = new Faker().Person.Email;
+    private static string _password = "1qaz!QAZ";
     private static Guid _userId;
     private static string _accessToken;
     private static string _refreshToken;
@@ -39,11 +35,11 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         {
             UserName = _userName,
             Email = _email,
-            Password = "1qaz!QAZ"
+            Password = _password
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(RegisterUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_REGISTER, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -58,12 +54,12 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new LoginRequest
         {
-            UserName = "amir",
-            Password = "1qaz!QAZ"
+            UserName = _userName,
+            Password = _password
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(LoginUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_LOGIN, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<TokenResult>();
 
@@ -91,7 +87,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(RefreshTokenUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_REFRESH_TOKEN, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<TokenResult>();
 
@@ -118,11 +114,36 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
     
         // Act
-        var response = await client.PostAsync(ForgotPasswordUri, content);
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_FORGOT_PASSWORD, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
     
         // Assert
         Assert.True(result.Data);
+    }
+
+    [Fact, TestPriority(5)]
+    public async Task ChangePassword_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        client.SetAccessToken(_accessToken);
+        var newPassword = "1QAZ!qaz";
+        var content = new StringContent(JsonConvert.SerializeObject(new ChangeAccountPasswordRequest
+        {
+            CurrentPassword = _password,
+            NewPassword = newPassword
+        }), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_CHANGE_PASSWORD, content);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+
+        // Assert
+        Assert.True(result.Data);
+
+        // Set Static Values
+        _password = newPassword;
     }
 }

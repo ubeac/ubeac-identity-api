@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -16,10 +18,12 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
    where TUser : User<TUserKey>
 {
     protected readonly IUserService<TUserKey, TUser> UserService;
+    protected readonly IMapper Mapper;
 
-    protected AccountsControllerBase(IUserService<TUserKey, TUser> userService)
+    protected AccountsControllerBase(IUserService<TUserKey, TUser> userService, IMapper mapper)
     {
         UserService = userService;
+        Mapper = mapper;
     }
 
     /// <summary>
@@ -112,6 +116,27 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
             return false.ToApiResult();
         }
     }
+
+    /// <summary>
+    /// Changes account password
+    /// </summary>
+    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
+    [HttpPost]
+    [Authorize]
+    public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangeAccountPasswordRequest request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
+            changePassword.UserId = await UserService.GetCurrentUserId(cancellationToken);
+            await UserService.ChangePassword(changePassword, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<bool>();
+        }
+    }
 }
 
 /// <summary>
@@ -121,7 +146,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
 public abstract class AccountsControllerBase<TUser> : AccountsControllerBase<Guid, TUser>
     where TUser : User
 {
-    protected AccountsControllerBase(IUserService<TUser> userService) : base(userService)
+    protected AccountsControllerBase(IUserService<TUser> userService, IMapper mapper) : base(userService, mapper)
     {
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -11,6 +12,7 @@ namespace API;
 /// </summary>
 /// <typeparam name="TKey">Type of unit role entity key -- TKey must have inherited from IEquatable</typeparam>
 /// <typeparam name="TUnitRole">Type of unit role entity -- TUnitRole must have inherited from UnitRole</typeparam>
+[Authorize(Roles = "ADMIN")]
 public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     where TKey : IEquatable<TKey>
     where TUnitRole : UnitRole<TKey>
@@ -25,18 +27,18 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// <summary>
     /// Creates a new unit role
     /// </summary>
-    /// <returns>If an exception is thrown, returns false, otherwise true</returns>
+    /// <returns>Returns id of created unit role</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Create(unitRole, cancellationToken);
-            return true.ToApiResult();
+            return unitRole.Id.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToApiResult<TKey>();
         }
     }
 

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using Bogus;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -12,13 +13,6 @@ namespace IntegrationTests;
 
 public class UsersTests : BaseTestClass, IClassFixture<Factory>
 {
-    private const string CreateUri = "/API/Users/Create";
-    private const string UpdateUri = "/API/Users/Update";
-    private const string AssignRolesUri = "/API/Users/AssignRoles";
-    private const string ChangePasswordUri = "/API/Users/ChangePassword";
-    private const string GetByIdUri = "/API/Users/GetById";
-    private const string GetAllUri = "/API/Users/GetAll";
-
     private static Guid _userId;
     private static string _password;
 
@@ -33,20 +27,20 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     public async Task Create_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var password = "1qaz!QAZ";
         var content = new StringContent(JsonConvert.SerializeObject(new InsertUserRequest
         {
-            UserName = "john",
+            UserName = new Faker().Person.UserName,
             Password = password,
-            PhoneNumber = "+98",
+            PhoneNumber = new Faker().Person.Phone,
             PhoneNumberConfirmed = false,
-            Email = "john@doe.com",
+            Email = new Faker().Person.Email,
             EmailConfirmed = false
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(CreateUri, content);
+        var response = await client.PostAsync(Endpoints.USERS_CREATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<Guid>();
 
@@ -62,10 +56,10 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     public async Task GetAll_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
 
         // Act
-        var response = await client.GetAsync(GetAllUri);
+        var response = await client.GetAsync(Endpoints.USERS_GET_ALL);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<IEnumerable<UserResponse>>();
 
@@ -78,10 +72,10 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     public async Task GetById_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
 
         // Act
-        var response = await client.GetAsync($"{GetByIdUri}?id={_userId}");
+        var response = await client.GetAsync($"{Endpoints.USERS_GET_BY_ID}?id={_userId}");
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<UserResponse>();
 
@@ -94,20 +88,20 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new UpdateUserRequest
         {
             Id = _userId,
-            PhoneNumber = "+9810",
+            PhoneNumber = new Faker().Person.Phone,
             PhoneNumberConfirmed = true,
-            Email = "john@doe.com",
+            Email = new Faker().Person.Email,
             EmailConfirmed = true,
             LockoutEnabled = true,
             LockoutEnd = null
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(UpdateUri, content);
+        var response = await client.PostAsync(Endpoints.USERS_UPDATE, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -119,7 +113,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
     public async Task AssignRoles_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var content = new StringContent(JsonConvert.SerializeObject(new AssignRoleRequest
         {
             Id = _userId,
@@ -127,7 +121,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(AssignRolesUri, content);
+        var response = await client.PostAsync(Endpoints.USERS_ASSIGN_ROLES, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 
@@ -135,13 +129,13 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         Assert.True(result.Data);
     }
 
-    [Fact, TestPriority(5)]
+    [Fact, TestPriority(6)]
     public async Task ChangePassword_ReturnsSuccessApiResult()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = await _factory.CreateAdminClient();
         var newPassword = "1QAZ!qaz";
-        var content = new StringContent(JsonConvert.SerializeObject(new ChangePasswordRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new ChangeUserPasswordRequest
         {
             UserId = _userId,
             CurrentPassword = _password,
@@ -149,7 +143,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         }), Encoding.UTF8, "application/json");
 
         // Act
-        var response = await client.PostAsync(ChangePasswordUri, content);
+        var response = await client.PostAsync(Endpoints.USERS_CHANGE_PASSWORD, content);
         response.EnsureSuccessStatusCode();
         var result = await response.GetApiResult<bool>();
 

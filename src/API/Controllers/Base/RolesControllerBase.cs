@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -11,6 +12,7 @@ namespace API;
 /// </summary>
 /// <typeparam name="TRoleKey">Type of role entity key -- TKey must have inherited from IEquatable</typeparam>
 /// <typeparam name="TRole">Type of role entity -- TRole must have inherited from Role</typeparam>
+[Authorize(Roles = "ADMIN")]
 public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
    where TRoleKey : IEquatable<TRoleKey>
    where TRole : Role<TRoleKey>
