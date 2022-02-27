@@ -15,17 +15,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="uBeac.Common" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Web.Common" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Web.Swagger" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Configuration" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Services.Abstractions" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Services" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Identity" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Identity.Common" Version="0.6.3-alpha" />
-		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.6.3-alpha" />
+		<PackageReference Include="uBeac.Common" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Web.Common" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Web.Swagger" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Configuration" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Services.Abstractions" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Services" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Identity" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Identity.Common" Version="0.6.4-alpha" />
+		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.6.4-alpha" />
 		<PackageReference Include="ValueInjecter" Version="3.2.0" />
 	</ItemGroup>
 
