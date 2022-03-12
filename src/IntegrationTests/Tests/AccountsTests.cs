@@ -58,6 +58,21 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
+    public async Task Logout_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient(_accessToken);
+
+        // Act
+        var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, Endpoints.ACCOUNTS_LOGOUT));
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+
+        // Assert
+        Assert.True(result.Data);
+    }
+
+    [Fact, TestPriority(3)]
     public async Task Login_ReturnsSuccessApiResult()
     {
         // Arrange
@@ -85,7 +100,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         _refreshToken = result.Data.RefreshToken;
     }
 
-    [Fact, TestPriority(3)]
+    [Fact, TestPriority(4)]
     public async Task RefreshToken_ReturnsSuccessApiResult()
     {
         // Arrange
@@ -113,7 +128,49 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         _refreshToken = result.Data.RefreshToken;
     }
 
-    [Fact, TestPriority(4)]
+    [Fact, TestPriority(5)]
+    public async Task Update_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient(_accessToken);
+        var content = new StringContent(JsonConvert.SerializeObject(new UpdateAccountRequest
+        {
+            FirstName = new Faker().Person.FirstName,
+            LastName = new Faker().Person.LastName,
+            Email = _email,
+            PhoneNumber = new Faker().Person.Phone
+        }), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await client.PostAsync(Endpoints.ACCOUNTS_UPDATE, content);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+
+        // Assert
+        Assert.True(result.Data);
+    }
+
+    [Fact, TestPriority(6)]
+    public async Task GetCurrent_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient(_accessToken);
+
+        // Act
+        var response = await client.GetAsync(Endpoints.ACCOUNTS_GET_CURRENT);
+        var result = await response.GetApiResult<UserResponse>();
+
+        // Assert
+        Assert.NotNull(result.Data);
+        Assert.NotEqual(default, result.Data.Id);
+        Assert.NotEmpty(result.Data.UserName);
+        Assert.NotEmpty(result.Data.FirstName);
+        Assert.NotEmpty(result.Data.LastName);
+        Assert.NotEmpty(result.Data.Email);
+        Assert.NotEmpty(result.Data.PhoneNumber);
+    }
+
+    [Fact, TestPriority(7)]
     public async Task ForgotPassword_ReturnsSuccessApiResult()
     {
         // Arrange
@@ -132,7 +189,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         Assert.True(result.Data);
     }
 
-    [Fact, TestPriority(5)]
+    [Fact, TestPriority(8)]
     public async Task ChangePassword_ReturnsSuccessApiResult()
     {
         // Arrange

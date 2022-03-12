@@ -121,7 +121,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new AssignRoleRequest
         {
             Id = _userId,
-            Roles = new List<string> { "admin" }
+            Roles = new List<string> { "ADMIN" }
         }), Encoding.UTF8, "application/json");
 
         // Act

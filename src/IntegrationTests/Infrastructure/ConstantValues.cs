@@ -4,10 +4,13 @@ public struct Endpoints
 {
     public const string ACCOUNTS_REGISTER = "/API/Accounts/Register";
     public const string ACCOUNTS_LOGIN = "/API/Accounts/Login";
+    public const string ACCOUNTS_LOGOUT = "/API/Accounts/Logout";
     public const string ACCOUNTS_REFRESH_TOKEN = "/API/Accounts/RefreshToken";
     public const string ACCOUNTS_FORGOT_PASSWORD = "/API/Accounts/ForgotPassword";
     public const string ACCOUNTS_RESET_PASSWORD = "/API/Accounts/ResetPassword";
     public const string ACCOUNTS_CHANGE_PASSWORD = "/API/Accounts/ChangePassword";
+    public const string ACCOUNTS_UPDATE = "/API/Accounts/Update";
+    public const string ACCOUNTS_GET_CURRENT = "/API/Accounts/GetCurrent";
 
     public const string USERS_CREATE = "/API/Users/Create";
     public const string USERS_UPDATE = "/API/Users/Update";
@@ -20,6 +23,7 @@ public struct Endpoints
     public const string ROLES_UPDATE = "/API/Roles/Update";
     public const string ROLES_DELETE = "/API/Roles/Delete";
     public const string ROLES_GET_ALL = "/API/Roles/GetAll";
+    public const string ROLES_GET_BY_ID = "/API/Roles/GetById";
 
     public const string UNIT_ROLES_CREATE = "/API/UnitRoles/Create";
     public const string UNIT_ROLES_UPDATE = "/API/UnitRoles/Update";
