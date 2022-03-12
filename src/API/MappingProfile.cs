@@ -7,7 +7,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<InsertUserRequest, AppUser>();
+        CreateMap<CreateUserRequest, AppUser>();
 
         CreateMap<ChangeUserPasswordRequest, ChangePassword>();
         CreateMap<ChangeUserPasswordRequest<Guid>, ChangePassword<Guid>>();
@@ -17,5 +17,11 @@ public class MappingProfile : Profile
 
         CreateMap<AppUser, UserResponse>();
         CreateMap<AppUser, UserResponse<Guid>>();
+
+        CreateMap<TokenResult, LoginResponse>();
+        CreateMap<TokenResult<Guid>, LoginResponse<Guid>>();
+
+        CreateMap<TokenResult, RegisterResponse>();
+        CreateMap<TokenResult<Guid>, RegisterResponse<Guid>>();
     }
 }
