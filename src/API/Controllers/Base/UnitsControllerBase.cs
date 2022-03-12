@@ -95,6 +95,24 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
             return ex.ToApiListResult<TUnit>();
         }
     }
+
+    /// <summary>
+    /// Get unit info by id
+    /// </summary>
+    /// <returns>Returns unit info</returns>
+    [HttpGet]
+    public virtual async Task<IApiResult<TUnit>> GetById([FromQuery] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var unit = await UnitService.GetById(request.Id, cancellationToken);
+            return unit.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<TUnit>();
+        }
+    }
 }
 
 /// <summary>
