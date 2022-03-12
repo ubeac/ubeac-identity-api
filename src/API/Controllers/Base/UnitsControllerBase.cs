@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -111,6 +112,24 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
         catch (Exception ex)
         {
             return ex.ToApiResult<TUnit>();
+        }
+    }
+
+    /// <summary>
+    /// Get units by parent id
+    /// </summary>
+    /// <returns>Returns units</returns>
+    [HttpGet]
+    public virtual async Task<IApiListResult<TUnit>> GetByParentId([FromQuery] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var units = await UnitService.GetByParentId(request.Id, cancellationToken);
+            return units.ToApiListResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiListResult<TUnit>();
         }
     }
 }
