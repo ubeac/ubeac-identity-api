@@ -19,6 +19,18 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
 var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
 
+// Adding CORS policy
+const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(DefaultCorsPolicy, policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
+
 // Adding swagger
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
@@ -80,13 +92,19 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseHttpsRedirection();
+
+// app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseAuthentication();
-app.UseMiddleware<AuthenticationMiddleware>();
-app.UseAuthorization();
+
 app.MapControllers();
+
+app.UseCors(DefaultCorsPolicy);
+
+app.UseAuthentication();
+app.UseMiddleware<AuthenticationMiddleware>(); // This middleware should be called after UseAuthentication
+app.UseAuthorization();
+
 app.UseCoreSwagger();
 app.Run();
 
