@@ -29,10 +29,12 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         // Arrange
         var client = await _factory.CreateAdminClient();
         var password = "1qaz!QAZ";
-        var content = new StringContent(JsonConvert.SerializeObject(new InsertUserRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new CreateUserRequest
         {
             UserName = new Faker().Person.UserName,
             Password = password,
+            FirstName = new Faker().Person.FirstName,
+            LastName = new Faker().Person.LastName,
             PhoneNumber = new Faker().Person.Phone,
             PhoneNumberConfirmed = false,
             Email = new Faker().Person.Email,
@@ -92,6 +94,8 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new UpdateUserRequest
         {
             Id = _userId,
+            FirstName = new Faker().Person.FirstName,
+            LastName = new Faker().Person.LastName,
             PhoneNumber = new Faker().Person.Phone,
             PhoneNumberConfirmed = true,
             Email = new Faker().Person.Email,
@@ -117,7 +121,7 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new AssignRoleRequest
         {
             Id = _userId,
-            Roles = new List<string> { "admin" }
+            Roles = new List<string> { "ADMIN" }
         }), Encoding.UTF8, "application/json");
 
         // Act

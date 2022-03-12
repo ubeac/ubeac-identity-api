@@ -37,12 +37,12 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>Returns id of created user</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<TUserKey>> Create([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TUserKey>> Create([FromBody] CreateUserRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = Mapper.Map<TUser>(request);
-            await UserService.Insert(user, request.Password, cancellationToken);
+            await UserService.Create(user, request.Password, cancellationToken);
             return user.Id.ToApiResult();
         }
         catch (Exception ex)
@@ -62,7 +62,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         {
             var user = await UserService.GetById(request.Id, cancellationToken);
             user.InjectFrom(request);
-            await UserService.Replace(user, cancellationToken);
+            await UserService.Update(user, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)

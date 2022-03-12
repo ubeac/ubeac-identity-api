@@ -16,6 +16,14 @@ public class Factory : WebApplicationFactory<Program>
         builder.UseEnvironment("Testing");
     }
 
+    // Creates new HttpClient with authorization header
+    public HttpClient CreateClient(string accessToken)
+    {
+        var client = CreateClient();
+        client.SetAccessToken(accessToken);
+        return client;
+    }
+
     // Creates new HttpClient and Adds admin token to request headers
     public async Task<HttpClient> CreateAdminClient()
     {

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Omu.ValueInjecter;
 using uBeac.Web;
 
 namespace API;
@@ -51,6 +52,8 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     {
         try
         {
+            var entity = await RoleService.GetById(role.Id, cancellationToken);
+            entity.InjectFrom(role);
             await RoleService.Update(role, cancellationToken);
             return true.ToApiResult();
         }
@@ -93,6 +96,24 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
         catch (Exception ex)
         {
             return ex.ToApiListResult<TRole>();
+        }
+    }
+
+    /// <summary>
+    /// Get role info by id
+    /// </summary>
+    /// <returns>Returns role info</returns>
+    [HttpGet]
+    public virtual async Task<IApiResult<TRole>> GetById([FromQuery] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var role = await RoleService.GetById(request.Id, cancellationToken);
+            return role.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<TRole>();
         }
     }
 }
