@@ -34,6 +34,8 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new RegisterRequest
         {
             UserName = _userName,
+            FirstName = new Faker().Person.FirstName,
+            LastName = new Faker().Person.LastName,
             Email = _email,
             Password = _password
         }), Encoding.UTF8, "application/json");
@@ -41,10 +43,18 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_REGISTER, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetApiResult<RegisterResponse>();
 
         // Assert
-        Assert.True(result.Data);
+        Assert.NotNull(result.Data);
+        Assert.NotEqual(default, result.Data.UserId);
+        Assert.NotEmpty(result.Data.Token);
+        Assert.NotEmpty(result.Data.RefreshToken);
+
+        // Set Static Values
+        _userId = result.Data.UserId;
+        _accessToken = result.Data.Token;
+        _refreshToken = result.Data.RefreshToken;
     }
 
     [Fact, TestPriority(2)]
