@@ -35,6 +35,7 @@ public struct Endpoints
     public const string UNITS_DELETE = "/API/Units/Delete";
     public const string UNITS_GET_ALL = "/API/Units/GetAll";
     public const string UNITS_GET_BY_ID = "/API/Units/GetById";
+    public const string UNITS_GET_BY_PARENT_ID = "/API/Units/GetByParentId";
 
     public const string UNIT_TYPES_CREATE = "/API/UnitTypes/Create";
     public const string UNIT_TYPES_UPDATE = "/API/UnitTypes/Update";

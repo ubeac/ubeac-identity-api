@@ -87,6 +87,21 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(4)]
+    public async Task GetByParentId_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = await _factory.CreateAdminClient();
+
+        // Act
+        var response = await client.GetAsync($"{Endpoints.UNITS_GET_BY_PARENT_ID}?id={_unitId}");
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<IEnumerable<AppUnit>>();
+
+        // Assert
+        Assert.NotNull(result.Data);
+    }
+
+    [Fact, TestPriority(5)]
     public async Task Update_ReturnsSuccessApiResult()
     {
         // Arrange
@@ -108,7 +123,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         Assert.True(result.Data);
     }
 
-    [Fact, TestPriority(5)]
+    [Fact, TestPriority(6)]
     public async Task Delete_ReturnsSuccessApiResult()
     {
         // Arrange
