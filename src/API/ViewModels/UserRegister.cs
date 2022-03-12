@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace API;
 
 public class RegisterRequest
 {
+    [Required]
+    public string FirstName { get; set; }
+
+    [Required]
+    public string LastName { get; set; }
+
     [Required]
     public string UserName { get; set; }
 
@@ -19,9 +26,13 @@ public class RegisterRequest
 
 public class RegisterResponse<TUserKey> where TUserKey : IEquatable<TUserKey>
 {
-    public TUserKey Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public string Token { get; set; }
-    public DateTime Expires { get; set; }
+    public virtual TUserKey UserId { get; set; }
+    public virtual List<string> Roles { get; set; }
+    public virtual string Token { get; set; }
+    public virtual string RefreshToken { get; set; }
+    public virtual DateTime Expiry { get; set; }
+}
+
+public class RegisterResponse : RegisterResponse<Guid>
+{
 }
