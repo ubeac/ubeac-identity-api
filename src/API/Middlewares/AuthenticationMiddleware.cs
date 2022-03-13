@@ -18,24 +18,30 @@ public class AuthenticationMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IUserService<AppUser> userService, IUserRoleService<AppUser> userRoleService)
+    public async Task Invoke(HttpContext context, IUserService<AppUser> userService, IUserRoleService<AppUser> userRoleService, IJwtTokenProvider tokenProvider)
     {
         try
         {
             var user = await GetUserAsync(context.Request, userService);
             if (user != null)
             {
+                var token = context.GetAuthToken();
+                var tokenValidationResult = tokenProvider.ValidateToken(token);
+                if (tokenValidationResult is false) throw new Exception();
+
                 var claims = new List<Claim>
                 {
                     new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new(ClaimTypes.Name, user.NormalizedUserName)
                 };
+                if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) claims.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
+                if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) claims.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
 
                 var userRoles = await userRoleService.GetRolesForUser(user.Id);
                 var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
                 claims.AddRange(userRoleClaims);
 
-                var identity = new ClaimsIdentity(claims, "Basic");
+                var identity = new ClaimsIdentity(claims, "DynamicAuth");
                 context.User = new ClaimsPrincipal(identity);
             }
         }

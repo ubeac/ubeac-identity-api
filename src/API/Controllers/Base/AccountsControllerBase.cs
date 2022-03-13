@@ -67,13 +67,11 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Logout(CancellationToken cancellationToken = default)
+    public virtual IApiResult<bool> Logout(CancellationToken cancellationToken = default)
     {
         try
         {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            // TODO: Refactor this: Only one token (current session) should be revoked
-            await UserService.RevokeTokens(userId, cancellationToken);
+            // TODO: Implement revoke token
             return true.ToApiResult();
         }
         catch (Exception ex)
