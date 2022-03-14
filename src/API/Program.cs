@@ -35,7 +35,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
+    .AddDefaultBsonSerializers();
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
