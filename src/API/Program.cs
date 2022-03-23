@@ -35,7 +35,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
+    .AddDefaultBsonSerializers();
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
@@ -72,23 +73,26 @@ builder.Services
     })
     .AddIdentityRole<AppRole>(configureOptions: options =>
     {
-        options.DefaultValues = new List<AppRole> { new("ADMIN") };
+        options.DefaultValues = new List<AppRole>
+        {
+            new("ADMIN"), new("ACCOUNTING_ADMIN"), new("FLIGHT_ADMIN"), new("FLIGHT_AGENT"), new("FLIGHT_TICKETING")
+        };
     })
     .AddIdentityUnit<AppUnit>(configureOptions: options =>
     {
-        var firstUnit = new AppUnit { Code = "1", Name = "First", Type = "A" };
-        var secondUnit = new AppUnit { Code = "2", Name = "Second", Type = "B" };
-        secondUnit.SetParentUnit(firstUnit);
-
-        options.DefaultValues = new List<AppUnit> { firstUnit, secondUnit };
+        // var firstUnit = new AppUnit { Code = "1", Name = "First", Type = "A" };
+        // var secondUnit = new AppUnit { Code = "2", Name = "Second", Type = "B" };
+        // secondUnit.SetParentUnit(firstUnit);
+        //
+        // options.DefaultValues = new List<AppUnit> { firstUnit, secondUnit };
     })
     .AddIdentityUnitType<AppUnitType>(configureOptions: options =>
     {
-        options.DefaultValues = new List<AppUnitType>
-        {
-            new() { Code = "A", Name = "First" },
-            new() { Code = "B", Name = "Second" }
-        };
+        // options.DefaultValues = new List<AppUnitType>
+        // {
+        //     new() { Code = "A", Name = "First" },
+        //     new() { Code = "B", Name = "Second" }
+        // };
     });
 
 var app = builder.Build();

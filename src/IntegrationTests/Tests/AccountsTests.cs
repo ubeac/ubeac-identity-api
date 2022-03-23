@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Register_ReturnsSuccessApiResult()
+    public async Task Register_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -43,7 +44,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_REGISTER, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<RegisterResponse>();
+        var result = await response.GetResult<RegisterResponse>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -58,7 +59,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task Logout_ReturnsSuccessApiResult()
+    public async Task Logout_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient(_accessToken);
@@ -66,14 +67,14 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Post, Endpoints.ACCOUNTS_LOGOUT));
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);
     }
 
     [Fact, TestPriority(3)]
-    public async Task Login_ReturnsSuccessApiResult()
+    public async Task Login_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -86,7 +87,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_LOGIN, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<TokenResult>();
+        var result = await response.GetResult<TokenResult>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -101,7 +102,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(4)]
-    public async Task RefreshToken_ReturnsSuccessApiResult()
+    public async Task RefreshToken_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -114,7 +115,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_REFRESH_TOKEN, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<TokenResult>();
+        var result = await response.GetResult<TokenResult>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -129,7 +130,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(5)]
-    public async Task Update_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient(_accessToken);
@@ -144,21 +145,22 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_UPDATE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);
     }
 
     [Fact, TestPriority(6)]
-    public async Task GetCurrent_ReturnsSuccessApiResult()
+    public async Task GetCurrentUser_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient(_accessToken);
 
         // Act
-        var response = await client.GetAsync(Endpoints.ACCOUNTS_GET_CURRENT);
-        var result = await response.GetApiResult<UserResponse>();
+        var response = await client.GetAsync(Endpoints.ACCOUNTS_GET_CURRENT_USER);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetResult<UserResponse>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -170,8 +172,23 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         Assert.NotEmpty(result.Data.PhoneNumber);
     }
 
+    [Fact, TestPriority(6)]
+    public async Task GetCurrentRoles_ReturnsSuccessResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient(_accessToken);
+
+        // Act
+        var response = await client.GetAsync(Endpoints.ACCOUNTS_GET_CURRENT_ROLES);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetResult<IEnumerable<string>>();
+
+        // Assert
+        Assert.NotNull(result.Data);
+    }
+
     [Fact, TestPriority(7)]
-    public async Task ForgotPassword_ReturnsSuccessApiResult()
+    public async Task ForgotPassword_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -183,14 +200,14 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_FORGOT_PASSWORD, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
     
         // Assert
         Assert.True(result.Data);
     }
 
     [Fact, TestPriority(8)]
-    public async Task ChangePassword_ReturnsSuccessApiResult()
+    public async Task ChangePassword_ReturnsSuccessResult()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -205,7 +222,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ACCOUNTS_CHANGE_PASSWORD, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);

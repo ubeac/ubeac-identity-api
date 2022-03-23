@@ -12,6 +12,9 @@ public class UserResponse<TKey> where TKey : IEquatable<TKey>
     public virtual bool EmailConfirmed { get; set; }
     public virtual string PhoneNumber { get; set; }
     public virtual bool PhoneNumberConfirmed { get; set; }
+    public virtual DateTime CreatedAt { get; set; }
+    public virtual DateTime LastUpdatedAt { get; set; }
+    public virtual bool Enabled { get; set; }
 }
 
 public class UserResponse : UserResponse<Guid>

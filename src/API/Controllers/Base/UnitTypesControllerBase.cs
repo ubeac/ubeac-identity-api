@@ -29,16 +29,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TKey>> Create([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitTypeService.Create(unitType, cancellationToken);
-            return unitType.Id.ToApiResult();
+            return unitType.Id.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TKey>();
+            return ex.ToResult<TKey>();
         }
     }
 
@@ -47,16 +47,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitTypeService.Update(unitType, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -65,16 +65,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitTypeService.Delete(request.Id, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -83,16 +83,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     /// </summary>
     /// <returns>Returns all unit types</returns>
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnitType>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IListResult<TUnitType>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var unitTypes = await UnitTypeService.GetAll(cancellationToken);
-            return unitTypes.ToApiListResult();
+            return unitTypes.ToListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TUnitType>();
+            return ex.ToListResult<TUnitType>();
         }
     }
 }

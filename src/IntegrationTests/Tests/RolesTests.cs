@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using API;
 using Bogus;
 using Newtonsoft.Json;
+using uBeac;
 using uBeac.Web;
 using Xunit;
 
@@ -25,7 +26,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Create_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -37,7 +38,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ROLES_CREATE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<Guid>();
+        var result = await response.GetResult<Guid>();
 
         // Assert
         Assert.NotEqual(default, result.Data);
@@ -47,7 +48,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task GetAll_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -55,7 +56,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(Endpoints.ROLES_GET_ALL);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<AppRole>>();
+        var result = await response.GetResult<IEnumerable<AppRole>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -63,7 +64,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(3)]
-    public async Task GetById_ReturnsSuccessApiResult()
+    public async Task GetById_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -71,7 +72,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync($"{Endpoints.ROLES_GET_BY_ID}?id={_roleId}");
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<AppRole>();
+        var result = await response.GetResult<AppRole>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -79,7 +80,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(4)]
-    public async Task Update_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -92,14 +93,14 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ROLES_UPDATE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);
     }
 
     [Fact, TestPriority(5)]
-    public async Task Delete_ReturnsSuccessApiResult()
+    public async Task Delete_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -111,7 +112,7 @@ public class RolesTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.ROLES_DELETE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Omu.ValueInjecter;
 using uBeac.Web;
 
 namespace API;
@@ -19,11 +18,13 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
    where TUser : User<TUserKey>
 {
     protected readonly IUserService<TUserKey, TUser> UserService;
+    protected readonly IUserRoleService<TUserKey, TUser> UserRoleService;
     protected readonly IMapper Mapper;
 
-    protected AccountsControllerBase(IUserService<TUserKey, TUser> userService, IMapper mapper)
+    protected AccountsControllerBase(IUserService<TUserKey, TUser> userService, IUserRoleService<TUserKey, TUser> userRoleService, IMapper mapper)
     {
         UserService = userService;
+        UserRoleService = userRoleService;
         Mapper = mapper;
     }
 
@@ -32,18 +33,19 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<RegisterResponse<TUserKey>>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<RegisterResponse<TUserKey>>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UserService.Register(model.UserName, model.Email, model.Password, cancellationToken);
-            var authResult = await UserService.Authenticate(model.UserName, model.Password, cancellationToken);
+            var user = Mapper.Map<TUser>(request);
+            await UserService.Create(user, request.Password, cancellationToken);
+            var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
             var response = Mapper.Map<RegisterResponse<TUserKey>>(authResult);
-            return response.ToApiResult();
+            return response.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<RegisterResponse<TUserKey>>();
+            return ex.ToResult<RegisterResponse<TUserKey>>();
         }
     }
 
@@ -52,33 +54,31 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>Returns user credential (like access token, refresh token, etc.)</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<LoginResponse<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<LoginResponse<TUserKey>>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            var authResult = await UserService.Authenticate(model.UserName, model.Password, cancellationToken);
+            var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
             var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
-            return response.ToApiResult();
+            return response.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<LoginResponse<TUserKey>>();
+            return ex.ToResult<LoginResponse<TUserKey>>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Logout(CancellationToken cancellationToken = default)
+    public virtual IResult<bool> Logout(CancellationToken cancellationToken = default)
     {
         try
         {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            // TODO: Refactor this: Only one token (current session) should be revoked
-            await UserService.RevokeTokens(userId, cancellationToken);
-            return true.ToApiResult();
+            // TODO: Implement revoke token
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -87,17 +87,17 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>Returns refreshed user credential (like access token, refresh token, etc.)</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<LoginResponse<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<LoginResponse<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            var authResult = await UserService.RefreshToken(model.RefreshToken, model.Token, cancellationToken);
+            var authResult = await UserService.RefreshToken(request.RefreshToken, request.Token, cancellationToken);
             var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
-            return response.ToApiResult();
+            return response.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<LoginResponse<TUserKey>>();
+            return ex.ToResult<LoginResponse<TUserKey>>();
         }
     }
 
@@ -106,17 +106,17 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UserService.ForgotPassword(model.UserName, cancellationToken);
-            return true.ToApiResult();
+            await UserService.ForgotPassword(request.UserName, cancellationToken);
+            return true.ToResult();
 
         }
         catch (Exception)
         {
-            return false.ToApiResult();
+            return false.ToResult();
         }
     }
 
@@ -125,16 +125,16 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ResetPassword([FromBody] ResetPasswordRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UserService.ResetPassword(model.UserName, model.Token, model.NewPassword, cancellationToken);
-            return true.ToApiResult();
+            await UserService.ResetPassword(request.UserName, request.Token, request.NewPassword, cancellationToken);
+            return true.ToResult();
         }
         catch (Exception)
         {
-            return false.ToApiResult();
+            return false.ToResult();
         }
     }
 
@@ -144,18 +144,37 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// <returns>Returns user info</returns>
     [HttpGet]
     [Authorize]
-    public virtual async Task<IApiResult<UserResponse<TUserKey>>> GetCurrent(CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<UserResponse<TUserKey>>> GetCurrentUser(CancellationToken cancellationToken = default)
     {
         try
         {
-            // TODO: Refactor this: (one query instead of two query -- get current user)
             var userId = await UserService.GetCurrentUserId(cancellationToken);
             var user = await UserService.GetById(userId, cancellationToken); var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
-            return userVm.ToApiResult();
+            return userVm.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<UserResponse<TUserKey>>();
+            return ex.ToResult<UserResponse<TUserKey>>();
+        }
+    }
+
+    /// <summary>
+    /// Get roles of current user
+    /// </summary>
+    /// <returns>Returns roles</returns>
+    [HttpGet]
+    [Authorize]
+    public virtual async Task<IListResult<string>> GetCurrentRoles(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var userId = await UserService.GetCurrentUserId(cancellationToken);
+            var roles = await UserRoleService.GetRolesForUser(userId, cancellationToken);
+            return roles.ToListResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToListResult<string>();
         }
     }
 
@@ -165,21 +184,20 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     [Authorize]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] UpdateAccountRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] UpdateAccountRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            // TODO: Refactor this: (one query instead of two query -- get current user)
             var userId = await UserService.GetCurrentUserId(cancellationToken);
             var user = await UserService.GetById(userId, cancellationToken);
-            user.InjectFrom(model);
+            Mapper.Map(request, user);
             await UserService.Update(user, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
 
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -189,18 +207,18 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
     [Authorize]
-    public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangeAccountPasswordRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ChangePassword([FromBody] ChangeAccountPasswordRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
-            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(model);
+            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
             changePassword.UserId = await UserService.GetCurrentUserId(cancellationToken);
             await UserService.ChangePassword(changePassword, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 }
@@ -212,7 +230,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
 public abstract class AccountsControllerBase<TUser> : AccountsControllerBase<Guid, TUser>
     where TUser : User
 {
-    protected AccountsControllerBase(IUserService<TUser> userService, IMapper mapper) : base(userService, mapper)
+    protected AccountsControllerBase(IUserService<TUser> userService, IUserRoleService<TUser> userRoleService, IMapper mapper) : base(userService, userRoleService, mapper)
     {
     }
 }
