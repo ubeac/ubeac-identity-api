@@ -23,6 +23,8 @@ public class UpdateUserRequest<TKey> where TKey : IEquatable<TKey>
 
     public virtual bool LockoutEnabled { get; set; }
     public virtual DateTimeOffset? LockoutEnd { get; set; }
+
+    public virtual bool Enabled { get; set; }
 }
 
 public class UpdateUserRequest : UpdateUserRequest<Guid>

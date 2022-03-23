@@ -29,16 +29,16 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// </summary>
     /// <returns>Returns id of created unit role</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TKey>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Create(unitRole, cancellationToken);
-            return unitRole.Id.ToApiResult();
+            return unitRole.Id.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TKey>();
+            return ex.ToResult<TKey>();
         }
     }
 
@@ -47,16 +47,16 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Update(unitRole, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -65,16 +65,16 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Delete(request.Id, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
@@ -83,16 +83,16 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     /// </summary>
     /// <returns>Returns all unit roles</returns>
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var unitRoles = await UnitRoleService.GetAll(cancellationToken);
-            return new ApiListResult<TUnitRole>(unitRoles);
+            return new ListResult<TUnitRole>(unitRoles);
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TUnitRole>();
+            return ex.ToListResult<TUnitRole>();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using API;
 using Bogus;
 using Newtonsoft.Json;
+using uBeac;
 using uBeac.Identity;
 using uBeac.Web;
 using Xunit;
@@ -28,7 +29,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(1)]
-    public async Task Create_ReturnsSuccessApiResult()
+    public async Task Create_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -42,7 +43,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.UNITS_CREATE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<Guid>();
+        var result = await response.GetResult<Guid>();
 
         // Assert
         Assert.NotEqual(default, result.Data);
@@ -52,7 +53,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(2)]
-    public async Task GetAll_ReturnsSuccessApiResult()
+    public async Task GetAll_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -60,7 +61,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync(Endpoints.UNITS_GET_ALL);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<AppUnit>>();
+        var result = await response.GetResult<IEnumerable<AppUnit>>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -68,7 +69,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(3)]
-    public async Task GetById_ReturnsSuccessApiResult()
+    public async Task GetById_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -76,7 +77,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync($"{Endpoints.UNITS_GET_BY_ID}?id={_unitId}");
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<AppUnit>();
+        var result = await response.GetResult<AppUnit>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -87,7 +88,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
     }
 
     [Fact, TestPriority(4)]
-    public async Task GetByParentId_ReturnsSuccessApiResult()
+    public async Task GetByParentId_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -95,14 +96,14 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.GetAsync($"{Endpoints.UNITS_GET_BY_PARENT_ID}?id={_unitId}");
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<IEnumerable<AppUnit>>();
+        var result = await response.GetResult<IEnumerable<AppUnit>>();
 
         // Assert
         Assert.NotNull(result.Data);
     }
 
     [Fact, TestPriority(5)]
-    public async Task Update_ReturnsSuccessApiResult()
+    public async Task Update_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -117,14 +118,14 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.UNITS_UPDATE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);
     }
 
     [Fact, TestPriority(6)]
-    public async Task Delete_ReturnsSuccessApiResult()
+    public async Task Delete_ReturnsSuccessResult()
     {
         // Arrange
         var client = await _factory.CreateAdminClient();
@@ -136,7 +137,7 @@ public class UnitsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(Endpoints.UNITS_DELETE, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<bool>();
+        var result = await response.GetResult<bool>();
 
         // Assert
         Assert.True(result.Data);
