@@ -15,6 +15,9 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
+// Adding debugger
+builder.Services.AddDebugger();
+
 // Get options from configuration files
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
 var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
