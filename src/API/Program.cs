@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using API;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using uBeac.Repositories.MongoDB;
@@ -14,9 +15,6 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
-
-// Adding debugger
-builder.Services.AddDebugger();
 
 // Get options from configuration files
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
@@ -33,6 +31,15 @@ builder.Services.AddCors(options =>
             .AllowAnyOrigin();
     });
 });
+
+// Disabling automatic model state validation by ASP.NET Core
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+// Adding debugger
+builder.Services.AddDebugger();
 
 // Adding swagger
 builder.Services.AddCoreSwaggerWithJWT("Example");
