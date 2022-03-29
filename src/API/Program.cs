@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Reflection;
-using API;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using uBeac.Repositories.MongoDB;
-using uBeac.Web;
+using AuthenticationMiddleware = uBeac.Identity.AuthenticationMiddleware;
+using AuthenticationOptions = uBeac.Identity.AuthenticationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -30,6 +30,15 @@ builder.Services.AddCors(options =>
             .AllowAnyOrigin();
     });
 });
+
+// Disabling automatic model state validation by ASP.NET Core
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+// Adding debugger
+builder.Services.AddDebugger();
 
 // Adding swagger
 builder.Services.AddCoreSwaggerWithJWT("Example");
@@ -60,8 +69,16 @@ builder.Services.AddUnitService<UnitService<AppUnit>, AppUnit>();
 builder.Services.AddUnitTypeService<UnitTypeService<AppUnitType>, AppUnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<AppUnitRole>, AppUnitRole>();
 
-// Adding jwt authentication
-builder.Services.AddJwtAuthentication(jwtOptions);
+// Adding jwt service
+builder.Services.AddJwtService<AppUser>(jwtOptions);
+
+// Adding authentication
+builder.Services.AddAuthentication<LocalAuthenticator<AppUser>>(new AuthenticationOptions
+{
+    Issuer = jwtOptions.Issuer,
+    Audience = jwtOptions.Audience,
+    Secret = jwtOptions.Secret
+});
 
 // Adding identity core
 builder.Services
@@ -78,22 +95,8 @@ builder.Services
             new("ADMIN"), new("ACCOUNTING_ADMIN"), new("FLIGHT_ADMIN"), new("FLIGHT_AGENT"), new("FLIGHT_TICKETING")
         };
     })
-    .AddIdentityUnit<AppUnit>(configureOptions: options =>
-    {
-        // var firstUnit = new AppUnit { Code = "1", Name = "First", Type = "A" };
-        // var secondUnit = new AppUnit { Code = "2", Name = "Second", Type = "B" };
-        // secondUnit.SetParentUnit(firstUnit);
-        //
-        // options.DefaultValues = new List<AppUnit> { firstUnit, secondUnit };
-    })
-    .AddIdentityUnitType<AppUnitType>(configureOptions: options =>
-    {
-        // options.DefaultValues = new List<AppUnitType>
-        // {
-        //     new() { Code = "A", Name = "First" },
-        //     new() { Code = "B", Name = "Second" }
-        // };
-    });
+    .AddIdentityUnit<AppUnit>()
+    .AddIdentityUnitType<AppUnitType>();
 
 var app = builder.Build();
 
