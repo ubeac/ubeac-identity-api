@@ -43,7 +43,7 @@ public class Factory : WebApplicationFactory<Program>
         }), Encoding.UTF8, "application/json");
         var response = await client.PostAsync(Endpoints.ACCOUNTS_LOGIN, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetResult<TokenResult>();
+        var result = await response.GetResult<SignInResult>();
         return result.Data.Token;
     }
 }

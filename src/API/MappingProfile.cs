@@ -26,10 +26,10 @@ public class MappingProfile : Profile
         CreateMap<AppUser, UserResponse>();
         CreateMap<AppUser, UserResponse<Guid>>();
 
-        CreateMap<TokenResult, LoginResponse>();
-        CreateMap<TokenResult<Guid>, LoginResponse<Guid>>();
+        CreateMap<SignInResult, LoginResponse>();
+        CreateMap<SignInResult<Guid>, LoginResponse<Guid>>();
 
         CreateMap<TokenResult, RegisterResponse>();
-        CreateMap<TokenResult<Guid>, RegisterResponse<Guid>>();
+        CreateMap<SignInResult<Guid>, RegisterResponse<Guid>>();
     }
 }
