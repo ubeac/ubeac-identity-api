@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -175,6 +176,27 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         catch (Exception ex)
         {
             return ex.ToListResult<string>();
+        }
+    }
+
+    /// <summary>
+    /// Get claims of current user
+    /// </summary>
+    /// <returns>Returns claims</returns>
+    [HttpGet]
+    [Authorize]
+    public virtual async Task<IListResult<Claim>> GetCurrentClaims(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var userId = await UserService.GetCurrentUserId(cancellationToken);
+            var user = await UserService.GetById(userId, cancellationToken);
+            var claims = await UserService.GetClaims(user, cancellationToken);
+            return claims.ToListResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToListResult<Claim>();
         }
     }
 

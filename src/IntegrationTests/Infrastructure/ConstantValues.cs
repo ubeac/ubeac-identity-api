@@ -12,6 +12,7 @@ public struct Endpoints
     public const string ACCOUNTS_UPDATE = "/API/Accounts/Update";
     public const string ACCOUNTS_GET_CURRENT_USER = "/API/Accounts/GetCurrentUser";
     public const string ACCOUNTS_GET_CURRENT_ROLES = "/API/Accounts/GetCurrentRoles";
+    public const string ACCOUNTS_GET_CURRENT_CLAIMS = "/API/Accounts/GetCurrentClaims";
 
     public const string USERS_CREATE = "/API/Users/Create";
     public const string USERS_UPDATE = "/API/Users/Update";

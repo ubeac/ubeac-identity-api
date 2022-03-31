@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using API;
@@ -183,6 +184,21 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         response.EnsureSuccessStatusCode();
         var result = await response.GetResult<IEnumerable<string>>();
 
+        // Assert
+        Assert.NotNull(result.Data);
+    }
+
+    [Fact, TestPriority(6)]
+    public async Task GetCurrentClaims_ReturnsSuccessResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient(_accessToken);
+
+        // Act
+        var response = await client.GetAsync(Endpoints.ACCOUNTS_GET_CURRENT_CLAIMS);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetResult<IEnumerable<UserClaimResponse>>();
+        
         // Assert
         Assert.NotNull(result.Data);
     }

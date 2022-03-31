@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AuthenticationMiddleware = uBeac.Identity.AuthenticationMiddleware;
-using AuthenticationOptions = uBeac.Identity.AuthenticationOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -14,10 +12,6 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
-
-// Get options from configuration files
-var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
-var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
 
 // Adding CORS policy
 const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
@@ -51,7 +45,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
 
 // Adding email provider
-builder.Services.AddEmailProvider(emailOptions);
+builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
@@ -70,15 +64,10 @@ builder.Services.AddUnitTypeService<UnitTypeService<AppUnitType>, AppUnitType>()
 builder.Services.AddUnitRoleService<UnitRoleService<AppUnitRole>, AppUnitRole>();
 
 // Adding jwt service
-builder.Services.AddJwtService<AppUser>(jwtOptions);
+builder.Services.AddJwtService<AppUser>(builder.Configuration);
 
 // Adding authentication
-builder.Services.AddAuthentication<LocalAuthenticator<AppUser>>(new AuthenticationOptions
-{
-    Issuer = jwtOptions.Issuer,
-    Audience = jwtOptions.Audience,
-    Secret = jwtOptions.Secret
-});
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Adding identity core
 builder.Services
@@ -109,7 +98,6 @@ app.MapControllers();
 app.UseCors(DefaultCorsPolicy);
 
 app.UseAuthentication();
-app.UseMiddleware<AuthenticationMiddleware>(); // This middleware should be called after UseAuthentication
 app.UseAuthorization();
 
 app.UseCoreSwagger();
