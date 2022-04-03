@@ -15,23 +15,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="uBeac.Common" Version="0.29.0" />
-		<PackageReference Include="uBeac.Identity.Jwt" Version="0.29.0" />
-		<PackageReference Include="uBeac.Web.Common" Version="0.29.0" />
-		<PackageReference Include="uBeac.Web.Jwt" Version="0.29.0" />
-		<PackageReference Include="uBeac.Web.Swagger" Version="0.29.0" />
-		<PackageReference Include="uBeac.Configuration" Version="0.29.0" />
-		<PackageReference Include="uBeac.Services.Abstractions" Version="0.29.0" />
-		<PackageReference Include="uBeac.Services" Version="0.29.0" />
-		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.29.0" />
-		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.29.0" />
-		<PackageReference Include="uBeac.Identity" Version="0.29.0" />
-		<PackageReference Include="uBeac.Identity.Common" Version="0.29.0" />
-		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.29.0" />
+		<PackageReference Include="uBeac.Common" Version="0.30.0" />
+		<PackageReference Include="uBeac.Identity.Jwt" Version="0.30.0" />
+		<PackageReference Include="uBeac.Logging.MongoDB" Version="0.30.0" />
+		<PackageReference Include="uBeac.Web.Common" Version="0.30.0" />
+		<PackageReference Include="uBeac.Web.Jwt" Version="0.30.0" />
+		<PackageReference Include="uBeac.Web.Logging" Version="0.30.0" />
+		<PackageReference Include="uBeac.Web.Swagger" Version="0.30.0" />
+		<PackageReference Include="uBeac.Configuration" Version="0.30.0" />
+		<PackageReference Include="uBeac.Services.Abstractions" Version="0.30.0" />
+		<PackageReference Include="uBeac.Services" Version="0.30.0" />
+		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.30.0" />
+		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.30.0" />
+		<PackageReference Include="uBeac.Identity" Version="0.30.0" />
+		<PackageReference Include="uBeac.Identity.Common" Version="0.30.0" />
+		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.30.0" />
 	</ItemGroup>
 
 </Project>
