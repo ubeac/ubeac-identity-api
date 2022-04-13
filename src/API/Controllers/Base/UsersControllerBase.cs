@@ -38,16 +38,9 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TUserKey>> Create([FromBody] CreateUserRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var user = Mapper.Map<TUser>(request);
-            await UserService.Create(user, request.Password, cancellationToken);
-            return user.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TUserKey>();
-        }
+        var user = Mapper.Map<TUser>(request);
+        await UserService.Create(user, request.Password, cancellationToken);
+        return user.Id.ToResult();
     }
 
     /// <summary>
@@ -57,17 +50,10 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] UpdateUserRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var user = await UserService.GetById(request.Id, cancellationToken);
-            Mapper.Map(request, user);
-            await UserService.Update(user, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        var user = await UserService.GetById(request.Id, cancellationToken);
+        Mapper.Map(request, user);
+        await UserService.Update(user, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -77,21 +63,14 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> AssignRoles([FromBody] AssignRoleRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            // Remove current roles
-            var currentRoles = await UserRoleService.GetRolesForUser(request.Id, cancellationToken);
-            await UserRoleService.RemoveRoles(request.Id, currentRoles, cancellationToken);
+        // Remove current roles
+        var currentRoles = await UserRoleService.GetRolesForUser(request.Id, cancellationToken);
+        await UserRoleService.RemoveRoles(request.Id, currentRoles, cancellationToken);
 
-            // Add new roles
-            if (request.Roles?.Any() is true) await UserRoleService.AddRoles(request.Id, request.Roles, cancellationToken);
+        // Add new roles
+        if (request.Roles?.Any() is true) await UserRoleService.AddRoles(request.Id, request.Roles, cancellationToken);
 
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        return true.ToResult();
     }
 
     /// <summary>
@@ -101,16 +80,9 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> ChangePassword([FromBody] ChangeUserPasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
-            await UserService.ChangePassword(changePassword, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
+        await UserService.ChangePassword(changePassword, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -120,16 +92,9 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpGet]
     public virtual async Task<IResult<UserResponse<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var user = await UserService.GetById(request.Id, cancellationToken);
-            var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
-            return userVm.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<UserResponse<TUserKey>>();
-        }
+        var user = await UserService.GetById(request.Id, cancellationToken);
+        var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
+        return userVm.ToResult();
     }
 
     /// <summary>
@@ -139,16 +104,9 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpGet]
     public virtual async Task<IListResult<UserResponse<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var users = await UserService.GetAll(cancellationToken);
-            var usersVm = Mapper.Map<IEnumerable<UserResponse<TUserKey>>>(users);
-            return usersVm.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<UserResponse<TUserKey>>();
-        }
+        var users = await UserService.GetAll(cancellationToken);
+        var usersVm = Mapper.Map<IEnumerable<UserResponse<TUserKey>>>(users);
+        return usersVm.ToListResult();
     }
 }
 
