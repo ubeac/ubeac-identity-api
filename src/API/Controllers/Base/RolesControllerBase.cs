@@ -32,10 +32,11 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IResult<TRoleKey>> Create([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TRoleKey>> Create([FromBody] CreateRoleRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
+            var role = Mapper.Map<TRole>(request);
             await RoleService.Insert(role, cancellationToken);
             return role.Id.ToResult();
         }
@@ -50,12 +51,12 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     /// </summary>
     /// <returns>If an exception is thrown, returns false, otherwise true</returns>
     [HttpPost]
-    public virtual async Task<IResult<bool>> Update([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] UpdateRoleRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
-            var entity = await RoleService.GetById(role.Id, cancellationToken);
-            Mapper.Map(role, entity);
+            var role = await RoleService.GetById(request.Id, cancellationToken);
+            Mapper.Map(request, role);
             await RoleService.Update(role, cancellationToken);
             return true.ToResult();
         }
