@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Reflection;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<DummyValidator>());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding CORS policy

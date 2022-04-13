@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace API;
 
 public class LoginRequest
 {
-    [Required]
     public string UserName { get; set; }
-
-    [Required]
-    [DataType(DataType.Password)]
     public string Password { get; set; }
+}
+
+public class LoginRequestValidator : AbstractValidator<LoginRequest>
+{
+    public LoginRequestValidator()
+    {
+        RuleFor(e => e.UserName)
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.Password)
+            .NotNull()
+            .NotEmpty();
+    }
 }
 
 public class LoginResponse<TUserKey>

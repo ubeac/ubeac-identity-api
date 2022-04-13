@@ -1,17 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace API;
 
 public class AssignRoleRequest<TKey> where TKey : IEquatable<TKey>
 {
-    [Required]
     public virtual TKey Id { get; set; }
-
-    public List<string> Roles { get; set; }
+    public virtual List<string> Roles { get; set; }
 }
 
 public class AssignRoleRequest : AssignRoleRequest<Guid>
 {
+}
+
+public class AssignRoleRequestValidator<TKey> : AbstractValidator<AssignRoleRequest<TKey>>
+    where TKey : IEquatable<TKey>
+{
+    public AssignRoleRequestValidator()
+    {
+        RuleFor(e => e.Id)
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.Roles)
+            .NotNull();
+    }
+}
+
+public class AssignRoleRequestValidator : AbstractValidator<AssignRoleRequest>
+{
+    public AssignRoleRequestValidator()
+    {
+        RuleFor(e => e.Id)
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.Roles)
+            .NotNull();
+    }
 }
