@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,21 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
-
-// Adding logging
-var logger = new LoggerConfiguration()
-    .AddApiLogging()
-    .WriteToMongoDB(builder.Configuration.GetConnectionString("LogConnection"))
-    .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
-
-// Adding http logging
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields = HttpLoggingFields.All;
-    options.MediaTypeOptions.AddText("application/json");
-});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -45,11 +28,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Disabling automatic model state validation by ASP.NET Core
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+// Disabling automatic model state validation of ASP.NET Core
+builder.Services.DisableAutomaticModelStateValidation();
 
 // Adding debugger
 builder.Services.AddDebugger();
@@ -62,7 +42,10 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
     .AddDefaultBsonSerializers();
 
 // Adding application context
-builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
+builder.Services.AddApplicationContext();
+
+// Adding history
+builder.Services.AddHistory().UsingMongoDb().ForDefault();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
