@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,11 +24,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Disabling automatic model state validation by ASP.NET Core
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+// Disabling automatic model state validation of ASP.NET Core
+builder.Services.DisableAutomaticModelStateValidation();
 
 // Adding debugger
 builder.Services.AddDebugger();
