@@ -32,15 +32,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Create(unit, cancellationToken);
-            return unit.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TKey>();
-        }
+        await UnitService.Create(unit, cancellationToken);
+        return unit.Id.ToResult();
     }
 
     /// <summary>
@@ -50,15 +43,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Update(unit, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitService.Update(unit, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -68,15 +54,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -86,15 +65,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpGet]
     public virtual async Task<IListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var units = await UnitService.GetAll(cancellationToken);
-            return units.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TUnit>();
-        }
+        var units = await UnitService.GetAll(cancellationToken);
+        return units.ToListResult();
     }
 
     /// <summary>
@@ -104,15 +76,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpGet]
     public virtual async Task<IResult<TUnit>> GetById([FromQuery] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var unit = await UnitService.GetById(request.Id, cancellationToken);
-            return unit.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TUnit>();
-        }
+        var unit = await UnitService.GetById(request.Id, cancellationToken);
+        return unit.ToResult();
     }
 
     /// <summary>
@@ -122,15 +87,8 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpGet]
     public virtual async Task<IListResult<TUnit>> GetByParentId([FromQuery] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var units = await UnitService.GetByParentId(request.Id, cancellationToken);
-            return units.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TUnit>();
-        }
+        var units = await UnitService.GetByParentId(request.Id, cancellationToken);
+        return units.ToListResult();
     }
 }
 

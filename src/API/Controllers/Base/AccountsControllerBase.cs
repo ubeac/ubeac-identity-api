@@ -36,18 +36,11 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<RegisterResponse<TUserKey>>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var user = Mapper.Map<TUser>(request);
-            await UserService.Create(user, request.Password, cancellationToken);
-            var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
-            var response = Mapper.Map<RegisterResponse<TUserKey>>(authResult);
-            return response.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<RegisterResponse<TUserKey>>();
-        }
+        var user = Mapper.Map<TUser>(request);
+        await UserService.Create(user, request.Password, cancellationToken);
+        var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
+        var response = Mapper.Map<RegisterResponse<TUserKey>>(authResult);
+        return response.ToResult();
     }
 
     /// <summary>
@@ -57,30 +50,16 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<LoginResponse<TUserKey>>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
-            var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
-            return response.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<LoginResponse<TUserKey>>();
-        }
+        var authResult = await UserService.Authenticate(request.UserName, request.Password, cancellationToken);
+        var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
+        return response.ToResult();
     }
 
     [HttpPost]
     public virtual IResult<bool> Logout(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            // TODO: Implement revoke token
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        // TODO: Implement revoke token
+        return true.ToResult();
     }
 
     /// <summary>
@@ -90,16 +69,9 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<LoginResponse<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var authResult = await UserService.RefreshToken(request.RefreshToken, request.Token, cancellationToken);
-            var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
-            return response.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<LoginResponse<TUserKey>>();
-        }
+        var authResult = await UserService.RefreshToken(request.RefreshToken, request.Token, cancellationToken);
+        var response = Mapper.Map<LoginResponse<TUserKey>>(authResult);
+        return response.ToResult();
     }
 
     /// <summary>
@@ -109,16 +81,8 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UserService.ForgotPassword(request.UserName, cancellationToken);
-            return true.ToResult();
-
-        }
-        catch (Exception)
-        {
-            return false.ToResult();
-        }
+        await UserService.ForgotPassword(request.UserName, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -128,15 +92,8 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UserService.ResetPassword(request.UserName, request.Token, request.NewPassword, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception)
-        {
-            return false.ToResult();
-        }
+        await UserService.ResetPassword(request.UserName, request.Token, request.NewPassword, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -147,16 +104,9 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [Authorize]
     public virtual async Task<IResult<UserResponse<TUserKey>>> GetCurrentUser(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            var user = await UserService.GetById(userId, cancellationToken); var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
-            return userVm.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<UserResponse<TUserKey>>();
-        }
+        var userId = await UserService.GetCurrentUserId(cancellationToken);
+        var user = await UserService.GetById(userId, cancellationToken); var userVm = Mapper.Map<UserResponse<TUserKey>>(user);
+        return userVm.ToResult();
     }
 
     /// <summary>
@@ -167,16 +117,9 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [Authorize]
     public virtual async Task<IListResult<string>> GetCurrentRoles(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            var roles = await UserRoleService.GetRolesForUser(userId, cancellationToken);
-            return roles.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<string>();
-        }
+        var userId = await UserService.GetCurrentUserId(cancellationToken);
+        var roles = await UserRoleService.GetRolesForUser(userId, cancellationToken);
+        return roles.ToListResult();
     }
 
     /// <summary>
@@ -187,17 +130,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [Authorize]
     public virtual async Task<IListResult<Claim>> GetCurrentClaims(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            var user = await UserService.GetById(userId, cancellationToken);
-            var claims = await UserService.GetClaims(user, cancellationToken);
-            return claims.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<Claim>();
-        }
+        var userId = await UserService.GetCurrentUserId(cancellationToken);
+        var user = await UserService.GetById(userId, cancellationToken);
+        var claims = await UserService.GetClaims(user, cancellationToken);
+        return claims.ToListResult();
     }
 
     /// <summary>
@@ -208,19 +144,11 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [Authorize]
     public virtual async Task<IResult<bool>> Update([FromBody] UpdateAccountRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var userId = await UserService.GetCurrentUserId(cancellationToken);
-            var user = await UserService.GetById(userId, cancellationToken);
-            Mapper.Map(request, user);
-            await UserService.Update(user, cancellationToken);
-            return true.ToResult();
-
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        var userId = await UserService.GetCurrentUserId(cancellationToken);
+        var user = await UserService.GetById(userId, cancellationToken);
+        Mapper.Map(request, user);
+        await UserService.Update(user, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -231,17 +159,10 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     [Authorize]
     public virtual async Task<IResult<bool>> ChangePassword([FromBody] ChangeAccountPasswordRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
-            changePassword.UserId = await UserService.GetCurrentUserId(cancellationToken);
-            await UserService.ChangePassword(changePassword, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
+        changePassword.UserId = await UserService.GetCurrentUserId(cancellationToken);
+        await UserService.ChangePassword(changePassword, cancellationToken);
+        return true.ToResult();
     }
 }
 

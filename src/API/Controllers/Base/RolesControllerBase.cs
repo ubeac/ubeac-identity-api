@@ -34,16 +34,9 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TRoleKey>> Create([FromBody] CreateRoleRequest request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var role = Mapper.Map<TRole>(request);
-            await RoleService.Insert(role, cancellationToken);
-            return role.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TRoleKey>();
-        }
+        var role = Mapper.Map<TRole>(request);
+        await RoleService.Insert(role, cancellationToken);
+        return role.Id.ToResult();
     }
 
     /// <summary>
@@ -53,17 +46,10 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] UpdateRoleRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var role = await RoleService.GetById(request.Id, cancellationToken);
-            Mapper.Map(request, role);
-            await RoleService.Update(role, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        var role = await RoleService.GetById(request.Id, cancellationToken);
+        Mapper.Map(request, role);
+        await RoleService.Update(role, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -73,15 +59,8 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await RoleService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await RoleService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -91,15 +70,8 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpGet]
     public virtual async Task<IListResult<TRole>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var roles = await RoleService.GetAll(cancellationToken);
-            return roles.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TRole>();
-        }
+        var roles = await RoleService.GetAll(cancellationToken);
+        return roles.ToListResult();
     }
 
     /// <summary>
@@ -109,15 +81,8 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpGet]
     public virtual async Task<IResult<TRole>> GetById([FromQuery] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var role = await RoleService.GetById(request.Id, cancellationToken);
-            return role.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TRole>();
-        }
+        var role = await RoleService.GetById(request.Id, cancellationToken);
+        return role.ToResult();
     }
 }
 

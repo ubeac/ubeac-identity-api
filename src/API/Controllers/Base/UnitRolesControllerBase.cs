@@ -31,15 +31,8 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TKey>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitRoleService.Create(unitRole, cancellationToken);
-            return unitRole.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TKey>();
-        }
+        await UnitRoleService.Create(unitRole, cancellationToken);
+        return unitRole.Id.ToResult();
     }
 
     /// <summary>
@@ -49,15 +42,8 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitRoleService.Update(unitRole, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitRoleService.Update(unitRole, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -67,15 +53,8 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitRoleService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitRoleService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     /// <summary>
@@ -85,15 +64,8 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     [HttpGet]
     public virtual async Task<IListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var unitRoles = await UnitRoleService.GetAll(cancellationToken);
-            return new ListResult<TUnitRole>(unitRoles);
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TUnitRole>();
-        }
+        var unitRoles = await UnitRoleService.GetAll(cancellationToken);
+        return new ListResult<TUnitRole>(unitRoles);
     }
 }
 
