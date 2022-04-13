@@ -1,16 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
 
 namespace API;
 
 public class ResetPasswordRequest
 {
-    [Required]
-    public string UserName { get; set; }
+    public virtual string UserName { get; set; }
+    public virtual string Token { get; set; }
+    public virtual string NewPassword { get; set; }
+}
 
-    [Required] 
-    public string Token { get; set; }
+public class ResetPasswordRequestValidator : AbstractValidator<ResetPasswordRequest>
+{
+    public ResetPasswordRequestValidator()
+    {
+        RuleFor(e => e.UserName)
+            .NotNull()
+            .NotEmpty();
 
-    [Required] 
-    [DataType(DataType.Password)]
-    public string NewPassword { get; set; }
+        RuleFor(e => e.Token)
+            .NotNull()
+            .NotEmpty();
+
+        RuleFor(e => e.NewPassword)
+            .NotNull()
+            .NotEmpty();
+    }
 }

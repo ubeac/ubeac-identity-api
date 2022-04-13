@@ -1,27 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace API;
 
 public class RegisterRequest
+{ 
+    public virtual string FirstName { get; set; }
+    public virtual string LastName { get; set; }
+    public virtual string UserName { get; set; }
+    public virtual string Email { get; set; }
+    public virtual string Password { get; set; }
+}
+
+public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
-    [Required]
-    public string FirstName { get; set; }
+    public RegisterRequestValidator()
+    {
+        RuleFor(e => e.FirstName)
+            .NotNull()
+            .NotEmpty()
+            .MaximumLength(256);
 
-    [Required]
-    public string LastName { get; set; }
+        RuleFor(e => e.LastName)
+            .NotNull()
+            .NotEmpty()
+            .MaximumLength(256);
 
-    [Required]
-    public string UserName { get; set; }
+        RuleFor(e => e.UserName)
+            .NotNull()
+            .NotEmpty();
 
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; }
+        RuleFor(e => e.Email)
+            .NotNull()
+            .NotEmpty()
+            .EmailAddress();
 
-    [Required]
-    [DataType(DataType.Password)]
-    public string Password { get; set; }
+        RuleFor(e => e.Password)
+            .NotNull()
+            .NotEmpty();
+    }
 }
 
 public class RegisterResponse<TUserKey> where TUserKey : IEquatable<TUserKey>
