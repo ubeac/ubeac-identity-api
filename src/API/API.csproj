@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\Base\" />
+		<Folder Include="ViewModels\Role\" />
 	</ItemGroup>
 
 	<ItemGroup>
