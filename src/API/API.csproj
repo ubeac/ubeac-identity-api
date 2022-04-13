@@ -12,10 +12,7 @@
 
 	<ItemGroup>
 		<Folder Include="Controllers\Base\" />
-	</ItemGroup>
-
-	<ItemGroup>
-
+		<Folder Include="Enums\" />
 	</ItemGroup>
 
 	<ItemGroup>
