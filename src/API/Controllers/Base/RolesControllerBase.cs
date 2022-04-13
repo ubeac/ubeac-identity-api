@@ -35,7 +35,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     public virtual async Task<IResult<TRoleKey>> Create([FromBody] CreateRoleRequest request, CancellationToken cancellationToken = default)
     {
         var role = Mapper.Map<TRole>(request);
-        await RoleService.Insert(role, cancellationToken);
+        await RoleService.Create(role, cancellationToken);
         return role.Id.ToResult();
     }
 
