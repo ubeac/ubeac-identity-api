@@ -42,7 +42,10 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
     .AddDefaultBsonSerializers();
 
 // Adding application context
-builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
+builder.Services.AddApplicationContext();
+
+// Adding history
+builder.Services.AddHistory().UsingMongoDb().ForDefault();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
