@@ -31,5 +31,13 @@ public class MappingProfile : Profile
 
         CreateMap<TokenResult, RegisterResponse>();
         CreateMap<SignInResult<Guid>, RegisterResponse<Guid>>();
+
+        CreateMap<CreateRoleRequest, AppRole>();
+
+        CreateMap<UpdateRoleRequest, AppRole>();
+        CreateMap<UpdateRoleRequest<Guid>, AppRole>();
+
+        CreateMap<AppRole, RoleResponse>();
+        CreateMap<AppRole, RoleResponse<Guid>>();
     }
 }
