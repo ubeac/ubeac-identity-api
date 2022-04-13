@@ -3,14 +3,18 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using uBeac.Logging.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding CORS policy
 const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
@@ -89,6 +93,7 @@ builder.Services
 var app = builder.Build();
 
 // app.UseHttpsRedirection();
+app.UseHttpLogging();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

@@ -2,8 +2,8 @@
   "Jwt": {
     "Issuer": "https://localhost:44352",
     "Audience": "https://localhost:44352",
-    "TokenExpiry": 3600, // seconds
-    "RefreshTokenExpiry": 36000, // seconds
+    "TokenExpiry": 10, // seconds
+    "RefreshTokenExpiry": 30, // seconds
     "Secret": "THIS SHOULD BE A COMPLEX SECRET!"
   }
 }
