@@ -4,16 +4,27 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using uBeac.Logging.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
+// Adding logger
+var logger = new LoggerConfiguration()
+    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogsConnection")))
+    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogsConnection")))
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllers()
     .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<DummyValidator>());
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Adding CORS policy
 const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
@@ -92,9 +103,10 @@ builder.Services
 var app = builder.Build();
 
 // app.UseHttpsRedirection();
-app.UseHttpLogging();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseApiLogging();
 
 app.MapControllers();
 
