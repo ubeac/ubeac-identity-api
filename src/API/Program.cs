@@ -64,17 +64,11 @@ builder.Services.AddEmailProvider(builder.Configuration);
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
 builder.Services.AddMongoDBRoleRepository<MongoDBContext, AppRole>();
-builder.Services.AddMongoDBUnitRepository<MongoDBContext, AppUnit>();
-builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, AppUnitType>();
-builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, AppUnitRole>();
 
 // Adding services
 builder.Services.AddUserService<UserService<AppUser>, AppUser>();
 builder.Services.AddRoleService<RoleService<AppRole>, AppRole>();
 builder.Services.AddUserRoleService<UserRoleService<AppUser>, AppUser>();
-builder.Services.AddUnitService<UnitService<AppUnit>, AppUnit>();
-builder.Services.AddUnitTypeService<UnitTypeService<AppUnitType>, AppUnitType>();
-builder.Services.AddUnitRoleService<UnitRoleService<AppUnitRole>, AppUnitRole>();
 
 // Adding jwt service
 builder.Services.AddJwtService<AppUser>(builder.Configuration);
@@ -96,9 +90,7 @@ builder.Services
         {
             new("ADMIN"), new("ACCOUNTING_ADMIN"), new("FLIGHT_ADMIN"), new("FLIGHT_AGENT"), new("FLIGHT_TICKETING")
         };
-    })
-    .AddIdentityUnit<AppUnit>()
-    .AddIdentityUnitType<AppUnitType>();
+    });
 
 var app = builder.Build();
 
