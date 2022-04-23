@@ -27,15 +27,10 @@ builder.Services.AddControllers()
     .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<DummyValidator>());
 
 // Adding CORS policy
-const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
+var corsPolicy = builder.Configuration.GetSection("CorsPolicy").Get<CorsPolicyOptions>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(DefaultCorsPolicy, policy =>
-    {
-        policy.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin();
-    });
+    options.AddPolicy(corsPolicy.Name, corsPolicy);
 });
 
 // Disabling automatic model state validation of ASP.NET Core
@@ -102,7 +97,7 @@ app.UseApiLogging();
 
 app.MapControllers();
 
-app.UseCors(DefaultCorsPolicy);
+app.UseCors(corsPolicy.Name);
 
 app.UseAuthentication();
 app.UseAuthorization();

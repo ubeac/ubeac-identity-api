@@ -1,0 +1,7 @@
+{
+  "CorsPolicy": {
+    "Name": "Default",
+    "Methods": [ "GET", "POST" ],
+    "Origins": [ "http://localhost:3000" ]
+  }
+}

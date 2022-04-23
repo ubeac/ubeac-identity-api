@@ -1,0 +1,8 @@
+{
+  "CorsPolicy": {
+    "Name": "Development",
+    "Headers": [ "*" ],
+    "Methods": [ "*" ],
+    "Origins": [ "*" ]
+  }
+}

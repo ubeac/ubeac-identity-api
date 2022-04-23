@@ -1,0 +1,7 @@
+{
+  "CorsPolicy": {
+    "Name": "Production",
+    "Methods": [ "GET", "POST" ],
+    "Origins": [ "http://example.com" ]
+  }
+}
