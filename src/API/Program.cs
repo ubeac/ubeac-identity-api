@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using uBeac.Logging.MongoDB;
@@ -92,9 +94,24 @@ builder.Services
         };
     });
 
+// Adding HSTS
+var hstsOptions = builder.Configuration.GetSection("Hsts").Get<HstsOptions>();
+builder.Services.AddHsts(options =>
+{
+    options.Preload = hstsOptions.Preload;
+    options.IncludeSubDomains = hstsOptions.IncludeSubDomains;
+    options.MaxAge = TimeSpan.FromDays(hstsOptions.MaxAge);
+    foreach (var host in hstsOptions.ExcludedHosts) options.ExcludedHosts.Add(host);
+});
+
 var app = builder.Build();
 
-// app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

@@ -1,0 +1,8 @@
+{
+  "Hsts": {
+    "Preload": true,
+    "IncludeSubDomains": true,
+    "MaxAge": 60,
+    "ExcludedHosts": [ "example.com", "www.example.com" ]
+  }
+}
