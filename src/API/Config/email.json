@@ -5,6 +5,7 @@
     "UserName": "ThisIsSmtpUserName",
     "Password": "ThisIsSmtpPassword",
     "SmtpHost": "ThisIsSmtpHost",
-    "SmtpPort": 80
+    "SmtpPort": 80,
+    "EnableSsl": true 
   }
 }
