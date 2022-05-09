@@ -4,22 +4,17 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
-using uBeac.Logging.MongoDB;
+using uBeac.Repositories.History.MongoDB;
+using uBeac.Web.Logging;
+using uBeac.Web.Logging.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
-// Adding logger
-var logger = new LoggerConfiguration()
-    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogsConnection")))
-    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogsConnection")))
-    .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+// Adding http logging
+builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -48,14 +43,14 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection")
-    .AddDefaultBsonSerializers();
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding application context
 builder.Services.AddApplicationContext();
 
 // Adding history
-builder.Services.AddHistory().UsingMongoDb().ForDefault();
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
@@ -98,7 +93,7 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseApiLogging();
+app.UseHttpLoggingMiddleware();
 
 app.MapControllers();
 

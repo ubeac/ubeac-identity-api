@@ -1,0 +1,10 @@
+{
+  "HttpLogging": {
+    "HttpLog2xxConnectionString": "mongodb://localhost:27017/template-http-logging-db",
+    "HttpLog2xxCollectionName": "HttpLog-2xx",
+    "HttpLog4xxConnectionString": "mongodb://localhost:27017/template-http-logging-db",
+    "HttpLog4xxCollectionName": "HttpLog-4xx",
+    "HttpLog5xxConnectionString": "mongodb://localhost:27017/template-http-logging-db",
+    "HttpLog5xxCollectionName": "HttpLog-5xx"
+  }
+}
