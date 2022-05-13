@@ -80,8 +80,8 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     [HttpPost]
     public virtual async Task<IResult<bool>> ChangePassword([FromBody] ChangeUserPasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
-        var changePassword = Mapper.Map<ChangePassword<TUserKey>>(request);
-        await UserService.ChangePassword(changePassword, cancellationToken);
+        var user = await UserService.GetById(request.UserId, cancellationToken);
+        await UserService.ChangePassword(user, request.NewPassword, cancellationToken);
         return true.ToResult();
     }
 

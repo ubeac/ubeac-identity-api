@@ -7,7 +7,6 @@ namespace API;
 public class ChangeUserPasswordRequest<TKey> where TKey : IEquatable<TKey>
 {
     public virtual TKey UserId { get; set; }
-    public virtual string CurrentPassword { get; set; }
     public virtual string NewPassword { get; set; }
 }
 
@@ -24,10 +23,6 @@ public class ChangeUserPasswordRequestValidator<TKey> : AbstractValidator<Change
             .NotNull()
             .NotEmpty();
 
-        RuleFor(e => e.CurrentPassword)
-            .NotNull()
-            .NotEmpty();
-
         RuleFor(e => e.NewPassword)
             .NotNull()
             .NotEmpty();
@@ -39,10 +34,6 @@ public class ChangeUserPasswordRequestValidator : AbstractValidator<ChangeUserPa
     public ChangeUserPasswordRequestValidator()
     {
         RuleFor(e => e.UserId)
-            .NotNull()
-            .NotEmpty();
-
-        RuleFor(e => e.CurrentPassword)
             .NotNull()
             .NotEmpty();
 

@@ -142,7 +142,6 @@ public class UsersTests : BaseTestClass, IClassFixture<Factory>
         var content = new StringContent(JsonConvert.SerializeObject(new ChangeUserPasswordRequest
         {
             UserId = _userId,
-            CurrentPassword = _password,
             NewPassword = newPassword
         }), Encoding.UTF8, "application/json");
 
