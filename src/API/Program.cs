@@ -14,7 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding http logging
-builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
+builder.Services.AddMongoDbHttpLogging(() =>
+{
+    var options = builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging");
+    options.ConnectionString = builder.Configuration.GetConnectionString("HttpLoggingConnection");
+    return options;
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -22,16 +27,12 @@ builder.Services.AddControllers()
     .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<DummyValidator>());
 
 // Adding CORS policy
-const string DefaultCorsPolicy = "_myAllowSpecificOrigins";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(DefaultCorsPolicy, policy =>
-    {
-        policy.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin();
-    });
-});
+var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
+builder.Services.AddCorsPolicy(corsPolicyOptions);
+
+// Adding HSTS
+var hstsOptions = builder.Configuration.GetSection("Hsts");
+builder.Services.AddHttpsPolicy(hstsOptions);
 
 // Disabling automatic model state validation of ASP.NET Core
 builder.Services.DisableAutomaticModelStateValidation();
@@ -49,8 +50,8 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 builder.Services.AddApplicationContext();
 
 // Adding history
-builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
+builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
@@ -89,19 +90,19 @@ builder.Services
 
 var app = builder.Build();
 
-// app.UseHttpsRedirection();
+app.UseHstsOnProduction(builder.Environment);
+app.UseCorsPolicy(corsPolicyOptions);
+app.UseHttpsRedirection();
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseHttpLoggingMiddleware();
-
 app.MapControllers();
-
-app.UseCors(DefaultCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseHttpLoggingMiddleware();
 app.UseCoreSwagger();
 app.Run();
 
