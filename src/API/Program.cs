@@ -51,7 +51,7 @@ builder.Services.AddApplicationContext();
 
 // Adding history
 builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
-builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<AppUser>();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
