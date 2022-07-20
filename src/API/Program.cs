@@ -90,20 +90,19 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseHstsOnProduction(builder.Environment);
 app.UseCorsPolicy(corsPolicyOptions);
-app.UseHttpsRedirection();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-app.MapControllers();
+app.UseCoreSwagger();
 
 app.UseAuthentication();
+app.UseHttpLoggingMiddleware();
 app.UseAuthorization();
 
-app.UseHttpLoggingMiddleware();
-app.UseCoreSwagger();
+app.MapControllers();
 app.Run();
 
 // For access test projects
