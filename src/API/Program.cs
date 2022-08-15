@@ -14,12 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding http logging
-builder.Services.AddMongoDbHttpLogging(() =>
-{
-    var options = builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging");
-    options.ConnectionString = builder.Configuration.GetConnectionString("HttpLoggingConnection");
-    return options;
-});
+builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnection", builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
