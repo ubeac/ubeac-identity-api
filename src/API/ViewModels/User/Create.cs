@@ -14,6 +14,7 @@ public class CreateUserRequest
     public virtual string Email { get; set; }
     public virtual bool EmailConfirmed { get; set; }
     public virtual List<string> Roles { get; set; }
+    public virtual bool Enabled { get; set; } = true;
 }
 
 public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
