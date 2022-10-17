@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding http logging
-builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
+builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnection", builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -71,10 +71,7 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services
     .AddIdentityUser<AppUser>(configureOptions: options =>
     {
-        options.AdminUser = new AppUser("admin")
-        {
-            Enabled = true
-        };
+        options.AdminUser = new AppUser("admin");
         options.AdminPassword = "1qaz!QAZ";
         options.AdminRole = "ADMIN";
     })
