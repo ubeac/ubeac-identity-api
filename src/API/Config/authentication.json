@@ -5,5 +5,8 @@
     "TokenExpiry": 3600, // seconds
     "RefreshTokenExpiry": 360000, // seconds
     "Secret": "THIS SHOULD BE A COMPLEX SECRET!"
+  },
+  "UserRegisterOptions": {
+    "EnableUserOnRegister": false
   }
 }

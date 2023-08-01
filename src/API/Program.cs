@@ -18,8 +18,8 @@ builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnec
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddControllers()
-    .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<DummyValidator>());
+builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 // Adding CORS policy
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
@@ -57,7 +57,7 @@ builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
 builder.Services.AddMongoDBRoleRepository<MongoDBContext, AppRole>();
 
 // Adding services
-builder.Services.AddUserService<UserService<AppUser>, AppUser>();
+builder.Services.AddUserService<UserService<AppUser>, AppUser>(builder.Configuration);
 builder.Services.AddRoleService<RoleService<AppRole>, AppRole>();
 builder.Services.AddUserRoleService<UserRoleService<AppUser>, AppUser>();
 

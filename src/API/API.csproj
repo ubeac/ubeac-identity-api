@@ -16,25 +16,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-		<PackageReference Include="FluentValidation.AspNetCore" Version="10.4.0" />
-		<PackageReference Include="uBeac.Common" Version="0.43.13" />
-		<PackageReference Include="uBeac.Identity.Jwt" Version="0.43.13" />
-		<PackageReference Include="uBeac.Logging.MongoDB" Version="0.43.13" />
-		<PackageReference Include="uBeac.Repositories.History.MongoDB" Version="0.43.13" />
-		<PackageReference Include="uBeac.Web.Common" Version="0.43.13" />
-		<PackageReference Include="uBeac.Web.Jwt" Version="0.43.13" />
-		<PackageReference Include="uBeac.Web.Logging" Version="0.43.13" />
-		<PackageReference Include="uBeac.Web.Logging.MongoDB" Version="0.43.13" />
-		<PackageReference Include="uBeac.Web.Swagger" Version="0.43.13" />
-		<PackageReference Include="uBeac.Configuration" Version="0.43.13" />
-		<PackageReference Include="uBeac.Services.Abstractions" Version="0.43.13" />
-		<PackageReference Include="uBeac.Services" Version="0.43.13" />
-		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.43.13" />
-		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.43.13" />
-		<PackageReference Include="uBeac.Identity" Version="0.43.13" />
-		<PackageReference Include="uBeac.Identity.Common" Version="0.43.13" />
-		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.43.13" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+		<PackageReference Include="uBeac.Common" Version="0.43.14" />
+		<PackageReference Include="uBeac.Identity.Jwt" Version="0.43.14" />
+		<PackageReference Include="uBeac.Logging.MongoDB" Version="0.43.14" />
+		<PackageReference Include="uBeac.Repositories.History.MongoDB" Version="0.43.14" />
+		<PackageReference Include="uBeac.Web.Common" Version="0.43.14" />
+		<PackageReference Include="uBeac.Web.Jwt" Version="0.43.14" />
+		<PackageReference Include="uBeac.Web.Logging" Version="0.43.14" />
+		<PackageReference Include="uBeac.Web.Logging.MongoDB" Version="0.43.14" />
+		<PackageReference Include="uBeac.Web.Swagger" Version="0.43.14" />
+		<PackageReference Include="uBeac.Configuration" Version="0.43.14" />
+		<PackageReference Include="uBeac.Services.Abstractions" Version="0.43.14" />
+		<PackageReference Include="uBeac.Services" Version="0.43.14" />
+		<PackageReference Include="uBeac.Repositories.Abstractions" Version="0.43.14" />
+		<PackageReference Include="uBeac.Repositories.MongoDB" Version="0.43.14" />
+		<PackageReference Include="uBeac.Identity" Version="0.43.14" />
+		<PackageReference Include="uBeac.Identity.Common" Version="0.43.14" />
+		<PackageReference Include="uBeac.Identity.MongoDB" Version="0.43.14" />
 	</ItemGroup>
 
 </Project>
